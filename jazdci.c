@@ -8,7 +8,7 @@
 
 */
 
-//---------------------------------------------------- Preprocesor ---------------------------------------------------
+//*---------------------------------------------------- Preprocesor ---------------------------------------------------
 
 // Program bol naprogramovany v Visual Studio Code s GCC kompilatorom
 
@@ -22,7 +22,7 @@
 #include <string.h>
 #include <errno.h>
 
-//----------------------------------------------------- Štruktúry ----------------------------------------------------
+//*----------------------------------------------------- Štruktúry ----------------------------------------------------
 
 typedef struct jazdec{
     char *meno;
@@ -33,44 +33,43 @@ typedef struct jazdec{
     float casy[5];
 }jazdec;
 
-//-------------------------------------------------- Pomocné funkcie -------------------------------------------------
+//*-------------------------------------------------- Pomocné funkcie -------------------------------------------------
 
 void nacitatJazdcov(jazdec ** tabulka);
 int pocetMedzier(char retazec[]); // Ziska pocet medzier v retazci
 
-//-------------------------------------------------- Hlavné funkcie --------------------------------------------------
+//*-------------------------------------------------- Hlavné funkcie --------------------------------------------------
 
 void podpis(char const* zadanie, char const* meno, char const* aisID);
-void sum();
+void sum(jazdec* tabulka);
 
 
 int main() {
 
-//----------------------------------------------------- Premenné -----------------------------------------------------
+//*----------------------------------------------------- Premenné -----------------------------------------------------
 
     char vyber;
-    jazdec * tabulka = NULL;
+    jazdec* tabulka = NULL;
 
-//-------------------------------------------------- Inicializácia ---------------------------------------------------
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
     podpis("Jazdci", "Martin Szabo", "116304");
     nacitatJazdcov(&tabulka);
 
-    for(int i=0; tabulka[i].meno != NULL; i++) { // TODO Remove
-        printf("\nMENO: %s", tabulka[i].meno);
-        printf("\nPRIEZVISKO: %s", tabulka[i].priezvisko);
-    }
-
-//------------------------------------------------------- Menu -------------------------------------------------------
+//*------------------------------------------------------- Menu -------------------------------------------------------
 
     do {
-        printf("\n\ne - Exit\ns - Sum\nd - Driver\nl - Lap\ng - Gender\nb - Brand\ny - Year\na - Average\nu - Under\nc - Change\nn - New Driver\nr - Remove Driver");
+        //TODO oramovať menu (pripadne spraviť reusable funkciu pre menu)
+        printf("\n\ns - Sum\nd - Driver\nl - Lap\ng - Gender\nb - Brand\ny - Year\na - Average\nu - Under\nc - Change\nn - New Driver\nr - Remove Driver\nr - Reload\ne - Exit");
         printf("\nVolba: ");
         scanf("%c", &vyber);
         getchar(); // Odstrani medzeru od scanfu na konci buffera
         switch (vyber) {
             case 's':
-                sum();
+                sum(tabulka);
+                break;
+            case 'r':
+                nacitatJazdcov(&tabulka);
                 break;
             default:
                 printf("Zly vyber");
@@ -85,7 +84,7 @@ int main() {
 
 void podpis(char const* zadanie, char const* meno, char const* aisID) {
 
-//-------------------------------------------------- Dĺžka reťazca ---------------------------------------------------
+//*-------------------------------------------------- Dĺžka reťazca ---------------------------------------------------
 
     // Zistenie dĺžky reťazcov (vhodne keď nechcem použiť string.h knižnicu)
     size_t dlzkaZadania = 0, dlzkaMena = 0, dlzkaAisID = 0;
@@ -105,7 +104,7 @@ void podpis(char const* zadanie, char const* meno, char const* aisID) {
         }
     }
 
-//----------------------------------------------- Veľkosť ohraničenia ------------------------------------------------
+//*----------------------------------------------- Veľkosť ohraničenia ------------------------------------------------
 
     size_t velkostOhranicenia = 50 + dlzkaZadania + dlzkaMena + dlzkaAisID;
     if(velkostOhranicenia % 2 == 1) {velkostOhranicenia++;}
@@ -115,14 +114,14 @@ void podpis(char const* zadanie, char const* meno, char const* aisID) {
         return;
     }
 
-//--------------------------------------------------- Vrchný rám -----------------------------------------------------
+//*--------------------------------------------------- Vrchný rám -----------------------------------------------------
 
     for (size_t i = 0; i < velkostOhranicenia; i++) {
         printf("-");
     }
     printf("\n");
     
-//----------------------------------------------------- Zadanie ------------------------------------------------------
+//*----------------------------------------------------- Zadanie ------------------------------------------------------
 
     if(zadanie && dlzkaZadania > 0) {
         printf("|");
@@ -138,7 +137,7 @@ void podpis(char const* zadanie, char const* meno, char const* aisID) {
         printf("|\n");
     }
 
-//------------------------------------------------------- Meno -------------------------------------------------------
+//*------------------------------------------------------- Meno -------------------------------------------------------
 
     if(meno && dlzkaMena > 0) {
         printf("|");
@@ -176,79 +175,105 @@ void podpis(char const* zadanie, char const* meno, char const* aisID) {
 
 void nacitatJazdcov(jazdec ** tabulka){
     
-//----------------------------------------------------- Premenné -----------------------------------------------------
+//*----------------------------------------------------- Premenné -----------------------------------------------------
 
     FILE* subor;
     char riadok[100];
     size_t velkost = 0;
 
-//-------------------------------------------------- Inicializácia ---------------------------------------------------
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
+    if((*tabulka)!=NULL){ free((*tabulka)); }
     // TODO ? fix garbage na konci pola ?
-    (*tabulka) = (jazdec*)malloc(velkost * sizeof(jazdec)); // Inicializujem dynamicke pole jazdcov 
+    (*tabulka) = (jazdec*)malloc(velkost * sizeof(jazdec)); // Inicializujem dynamicke pole jazdcov  // TODO checknúť alokáciu
     
     if(!(subor = fopen("jazdci.csv", "r+"))){
         printf("Error: %d", errno);
         exit(EXIT_FAILURE);
     }
 
-//------------------------------------------------ Čítanie zo súboru -------------------------------------------------
+//*------------------------------------------------ Čítanie zo súboru -------------------------------------------------
 
     while(fgets(riadok, 100, subor)){
         velkost++;
-        (*tabulka) = (jazdec*)realloc((*tabulka),velkost * sizeof(jazdec));
+        (*tabulka) = (jazdec*)realloc((*tabulka),velkost * sizeof(jazdec)); // TODO checknúť alokáciu
         
-        
-        char *udaj = strtok(riadok, ";"); // Strtok rozdeli reťazec na niekolko častí oddelene ";".
+        char *udaj = (char*)calloc(100,sizeof(char)); // TODO checknúť alokáciu
+        strcpy(udaj,riadok);
+        udaj = strtok(udaj, ";"); // Strtok rozdeli reťazec na niekolko častí oddelene ";".
 
-        char kopia[100];
-        strcpy(kopia, udaj);
+        //*------------------------------------  Kontrola, či jazdec nemá stredné meno ---------------------------------
 
-        // Kontrola ci nema jazdec stredne meno
-        if(pocetMedzier(kopia)>1){
-
-            udaj = strtok(riadok, " ");  // Rozseknem si meno na mensie
-
-            for (size_t i = 0; udaj != NULL; i++) { 
-                // Iterujem tak ze prve dve casti dam pod meno...
-                if(i < 1){
-                    (*tabulka)[velkost-1].meno = (char*) calloc(strlen(udaj), sizeof(char)); 
+        if(pocetMedzier(udaj)>1){
+            udaj = strtok(udaj, " ");  // Rozseknem si meno na menšie
+            for (size_t i = 0; udaj != NULL; i++){ 
+                switch (i){
+                case 0: // Iterujem tak že prvé dve časti dám pod meno...
+                    (*tabulka)[velkost-1].meno = (char*) calloc(strlen(udaj), sizeof(char)); // TODO checknúť alokáciu
                     strcpy((*tabulka)[velkost-1].meno, udaj);
-                }
-                else if(i < 2){
+                    break;
+                case 1: //...
                     strcat((*tabulka)[velkost-1].meno, " ");
                     strcat((*tabulka)[velkost-1].meno, udaj);
-                }
-                // ...zvysok ide pod priezvisko
-                else{
-                    (*tabulka)[velkost-1].priezvisko = (char*) calloc(strlen(udaj), sizeof(char)); 
+                    break;
+                case 2: // ...zvyšok ide pod priezvisko
+                    (*tabulka)[velkost-1].priezvisko = (char*) calloc(strlen(udaj), sizeof(char)); // TODO checknúť alokáciu
                     strcpy((*tabulka)[velkost-1].priezvisko, udaj);
+                    break;
+                default: //...
+                    strcat((*tabulka)[velkost-1].priezvisko, " ");
+                    strcat((*tabulka)[velkost-1].priezvisko, udaj);
+                    break;
                 }
+                // Toto prečíta posledný NULL token a zmaže starý...
                 udaj = strtok(NULL, " "); // Strtok s argumentom NULL nám bude pokračovať v tokenizácií reťazca.
             }
         }
         else{
-            (*tabulka)[velkost-1].meno = (char*) calloc(strlen(udaj), sizeof(char));
-            (*tabulka)[velkost-1].priezvisko = (char*) calloc(strlen(udaj), sizeof(char));
-            udaj = strtok(riadok, " ");
+            (*tabulka)[velkost-1].meno = (char*) calloc(strlen(udaj), sizeof(char)); // TODO checknúť alokáciu
+            (*tabulka)[velkost-1].priezvisko = (char*) calloc(strlen(udaj), sizeof(char)); // TODO checknúť alokáciu
+            udaj = strtok(udaj, " ");
             strcpy((*tabulka)[velkost-1].meno, udaj);
             udaj = strtok(NULL, ";");
             strcpy((*tabulka)[velkost-1].priezvisko, udaj);
-
+            udaj = strtok(NULL, ";");
         }
+        
+        //*----------------------------------------  Nahranie zvyšných údajov -----------------------------------------
 
-        for (size_t i = 0; udaj != NULL; i++) {
+        // ...nemusím uvolňovať údaj lebo pri prechádzani tokenov reťazca sa staré sami zmažú
+        udaj = (char*)calloc(100,sizeof(char)); // TODO checknúť alokáciu
+        strcpy(udaj,riadok);
+        udaj = strtok(udaj, ";"); /// Strtok rozdelí reťazec na niekoľko častí oddelene ";".
 
-            // TODO nahrať dalšie údaje do pola jazdcov
-            //printf("%s\n", udaj);
+        for (size_t i = 0; udaj != NULL; i++){
+            switch (i) {
+            case 1:
+                (*tabulka)[velkost-1].pohlavie = udaj[0];
+                break;
+            case 2:
+                (*tabulka)[velkost-1].rok = atoi(udaj);
+                break;
+            case 3:
+                (*tabulka)[velkost-1].znacka = (char*) calloc(strlen(udaj), sizeof(char)); // TODO checknúť alokáciu
+                strcpy((*tabulka)[velkost-1].znacka, udaj);
+                break;
+            case 4: case 5: case 6: case 7: case 8:
+                for (size_t j = 0; udaj != NULL && j < 5; j++){
+                    (*tabulka)[velkost-1].casy[j] = atof(udaj);
+                    udaj = strtok(NULL, ";");
+                }
+                break;
+            default:
+                break;
+            }
             udaj = strtok(NULL, ";");
         }
     }
-
     fclose(subor);
 }
 
-int pocetMedzier(char retazec[]){
+int pocetMedzier(char retazec[]){ // TODO zmen na dynamicke pole?
     int medzera = 0;  
     for(size_t i = 0; i < strlen(retazec); i++){
         if(retazec[i]==' '){
@@ -258,6 +283,16 @@ int pocetMedzier(char retazec[]){
     return medzera;
 }
 
-void sum(){
-    
+void sum(jazdec* tabulka){
+    for(int i=0; tabulka[i].meno != NULL; i++) { // TODO Remove
+        printf("\nMENO: %s", tabulka[i].meno);
+        printf("\nPRIEZVISKO: %s", tabulka[i].priezvisko);
+        printf("\nPOHLAVIE: %c", tabulka[i].pohlavie);
+        printf("\nROK: %d", tabulka[i].rok);
+        printf("\nZNACKA: %s", tabulka[i].znacka);
+        for (size_t j = 0; j < 5; j++){
+            printf("\nCAS%d: %.3f", j, tabulka[i].casy[j]);
+        }
+        
+    }
 }
