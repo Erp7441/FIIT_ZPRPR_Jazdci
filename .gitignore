@@ -10,5 +10,7 @@
 
 cppcheck-addon-ctu-file-list
 jazdci.c.ctu-info
-.gitignore
+tempCodeRunnerFile.c
+tempCodeRunnerFile.c.ctu-info'
+jazdci.c.dump
 
