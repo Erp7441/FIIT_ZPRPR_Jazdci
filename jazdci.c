@@ -45,7 +45,7 @@ int pocetMedzier(char* retazec); // Získa počet medzier v reťazci
 void podpis(char const* zadanie, char const* meno, char const* aisID);
 void sum(jazdec* tabulka, size_t velkost);
 
-int main() {
+int main(){
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
@@ -60,13 +60,13 @@ int main() {
 
 //*------------------------------------------------------- Menu -------------------------------------------------------
 
-    do {
+    do{
         //TODO oramovať menu (pripadne spraviť reusable funkciu pre menu)
         printf("\n\ns - Sum\nd - Driver\nl - Lap\ng - Gender\nb - Brand\ny - Year\na - Average\nu - Under\nc - Change\nn - New Driver\nr - Remove Driver\nr - Reload\ne - Exit");
         printf("\nVolba: ");
         scanf_s("%c", &vyber, 1);
         getchar(); // Odstráni medzeru od scanfu na konci buffera
-        switch (vyber) {
+        switch (vyber){
             case 's':
                 sum(tabulka, velkost);
                 break;
@@ -77,7 +77,7 @@ int main() {
                 free(tabulka);
                 break;
             default:
-                printf("Zly vyber");
+                printf("\nChyba: Zly vyber");
                 break;
         }
     } while (vyber != 'e');
@@ -87,24 +87,24 @@ int main() {
     return 0;
 }
 
-void podpis(char const* zadanie, char const* meno, char const* aisID) {
+void podpis(char const* zadanie, char const* meno, char const* aisID){
 
 //*-------------------------------------------------- Dĺžka reťazca ---------------------------------------------------
 
     // Zistenie dĺžky reťazcov (vhodne keď nechcem použiť string.h knižnicu)
     size_t dlzkaZadania = 0, dlzkaMena = 0, dlzkaAisID = 0;
-    if(zadanie) {
-        for (size_t i = 0; zadanie[i] != '\0'; i++) {
+    if(zadanie){
+        for (size_t i = 0; zadanie[i] != '\0'; i++){
             dlzkaZadania++;
         }
     }
-    if(meno) {
-        for (size_t i = 0; meno[i] != '\0'; i++) {
+    if(meno){
+        for (size_t i = 0; meno[i] != '\0'; i++){
             dlzkaMena++;
         }
     }
-    if(aisID) { 
-        for (size_t i = 0; aisID[i] != '\0'; i++) {
+    if(aisID){ 
+        for (size_t i = 0; aisID[i] != '\0'; i++){
             dlzkaAisID++;
         }
     }
@@ -112,30 +112,30 @@ void podpis(char const* zadanie, char const* meno, char const* aisID) {
 //*----------------------------------------------- Veľkosť ohraničenia ------------------------------------------------
 
     size_t velkostOhranicenia = 50 + dlzkaZadania + dlzkaMena + dlzkaAisID;
-    if(velkostOhranicenia % 2 == 1) {velkostOhranicenia++;}
+    if(velkostOhranicenia % 2 == 1){velkostOhranicenia++;}
     
-    if(dlzkaZadania == 0 && dlzkaMena == 0 && dlzkaAisID == 0) {
+    if(dlzkaZadania == 0 && dlzkaMena == 0 && dlzkaAisID == 0){
         printf("Nezadali ste ziadne udaje");
         return;
     }
 
 //*--------------------------------------------------- Vrchný rám -----------------------------------------------------
 
-    for (size_t i = 0; i < velkostOhranicenia; i++) {
+    for (size_t i = 0; i < velkostOhranicenia; i++){
         printf("-");
     }
     printf("\n");
     
 //*----------------------------------------------------- Zadanie ------------------------------------------------------
 
-    if(zadanie && dlzkaZadania > 0) {
+    if(zadanie && dlzkaZadania > 0){
         printf("|");
-        for (size_t i = 0; i < (velkostOhranicenia - dlzkaZadania - 1)/2; i++) {
+        for (size_t i = 0; i < (velkostOhranicenia - dlzkaZadania - 1)/2; i++){
             printf(" "); // Do polovičky ohraničenia vypíšeme medzery...
         }
         printf("%s", zadanie); // ...Potom vypíšeme zadanie...
-        if(dlzkaZadania % 2 == 1) {dlzkaZadania++;}
-        for (size_t i = 0; i < (velkostOhranicenia - dlzkaZadania - 1)/2; i++) {
+        if(dlzkaZadania % 2 == 1){dlzkaZadania++;}
+        for (size_t i = 0; i < (velkostOhranicenia - dlzkaZadania - 1)/2; i++){
             printf(" "); // Následne dopíšeme zvyšné medzery...
         }
         // Na koniec zakončíme riadok
@@ -144,35 +144,35 @@ void podpis(char const* zadanie, char const* meno, char const* aisID) {
 
 //*------------------------------------------------------- Meno -------------------------------------------------------
 
-    if(meno && dlzkaMena > 0) {
+    if(meno && dlzkaMena > 0){
         printf("|");
-        for (size_t i = 0; i < (velkostOhranicenia - dlzkaMena - 1)/2; i++) {
+        for (size_t i = 0; i < (velkostOhranicenia - dlzkaMena - 1)/2; i++){
             printf(" ");
         }
         printf("%s", meno);
-        if(dlzkaMena % 2 == 1) {dlzkaMena++;}
-        for (size_t i = 0; i < (velkostOhranicenia - dlzkaMena - 1)/2; i++) {
+        if(dlzkaMena % 2 == 1){dlzkaMena++;}
+        for (size_t i = 0; i < (velkostOhranicenia - dlzkaMena - 1)/2; i++){
             printf(" ");
         }
         printf("|\n");
     }
 
     // AIS ID
-    if(aisID && dlzkaAisID > 0) {
+    if(aisID && dlzkaAisID > 0){
         printf("|");
-        for (size_t i = 0; i < (velkostOhranicenia - dlzkaAisID - 1)/2; i++) {
+        for (size_t i = 0; i < (velkostOhranicenia - dlzkaAisID - 1)/2; i++){
             printf(" ");
         }
         printf("%s", aisID);
-        if(dlzkaAisID % 2 == 1) {dlzkaAisID++;}
-        for (size_t i = 0; i < (velkostOhranicenia - dlzkaAisID - 1)/2; i++) {
+        if(dlzkaAisID % 2 == 1){dlzkaAisID++;}
+        for (size_t i = 0; i < (velkostOhranicenia - dlzkaAisID - 1)/2; i++){
             printf(" ");
         }
         printf("|\n");
     }
 
     // Spodný rám
-    for (size_t i = 0; i < velkostOhranicenia; i++) {
+    for (size_t i = 0; i < velkostOhranicenia; i++){
         printf("-");
     }
     return;    
@@ -305,12 +305,25 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
         udaj = strtok_s(udaj, ";", &dalsi);
 
         for (size_t i = 0; udaj != NULL; i++){
-            switch (i) {
+            switch (i){
             case 1:
-                (*tabulka)[(*velkost)-1].pohlavie = udaj[0];
+                if(udaj [0] == 'm' || udaj [0] == 'f' || udaj [0] == 'z'){ (*tabulka)[(*velkost)-1].pohlavie = udaj[0]; }
+                else{
+                    printf("\nSubor nie je mozne precitat");
+                    printf("\nChybne pohlavie pri jazdcovi cislo %zu: %s %s -> '%c'", (*velkost), (*tabulka)[(*velkost)-1].meno, (*tabulka)[(*velkost)-1].priezvisko, udaj[0]);
+                    exit(EXIT_FAILURE);
+                }
                 break;
             case 2:
-                (*tabulka)[(*velkost)-1].rok = strtol(udaj, NULL, 0); // Tretí argument je typ číselnej sústavy 0 = automaticky
+                /*
+                    TODO Vyriešiť prípady “a1968”, “1a968”, “19a68”, “196a8”, a “1968a”
+                    ? Podfunkcia na kontrolovanie ci každé písmeno z reťazca je čislo
+                */
+                if(sscanf_s(udaj, "%d", &(*tabulka)[(*velkost)-1].rok, sizeof(int)) != 1){
+                    printf("\nSubor nie je mozne precitat");
+                    printf("\nChybny rok narodenia pri jazdcovi cislo %zu: %s %s -> '%s'", (*velkost), (*tabulka)[(*velkost)-1].meno, (*tabulka)[(*velkost)-1].priezvisko, udaj);
+                    exit(EXIT_FAILURE);
+                }
                 break;
             case 3:
                 if(!((*tabulka)[(*velkost)-1].znacka = (char*) calloc(strlen(udaj), sizeof(char)))){
@@ -324,7 +337,15 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
                 break;
             case 4: case 5: case 6: case 7: case 8:
                 for (size_t j = 0; udaj != NULL && j < 5; j++){
-                    (*tabulka)[(*velkost)-1].casy[j] = strtod(udaj, NULL);
+                    /*
+                        TODO Vyriešiť prípady "a76.343", "7a6.343", "76a.343", "76.a343", "76.3a43", "76.34a3" a "76.343a"
+                        ? Podfunkcia na kontrolovanie ci každé písmeno z reťazca je čislo
+                    */
+                    if(sscanf_s(udaj, "%f", &(*tabulka)[(*velkost)-1].casy[j], sizeof(float)) != 1){
+                        printf("\nSubor nie je mozne precitat");
+                        printf("\nChybny cas pri jazdcovi cislo %zu: %s %s -> '%s'", (*velkost), (*tabulka)[(*velkost)-1].meno, (*tabulka)[(*velkost)-1].priezvisko, udaj);
+                        exit(EXIT_FAILURE);
+                    }
                     udaj = strtok_s(NULL, ";", &dalsi);
                 }
                 break;
@@ -348,15 +369,21 @@ int pocetMedzier(char* retazec){
 }
 
 void sum(jazdec* tabulka, size_t velkost){
-    for(size_t i=0; i < velkost; i++) { // TODO Remove
-        printf("\nMENO: %s", tabulka[i].meno);
-        printf("\nPRIEZVISKO: %s", tabulka[i].priezvisko);
-        printf("\nPOHLAVIE: %c", tabulka[i].pohlavie);
-        printf("\nROK: %d", tabulka[i].rok);
-        printf("\nZNACKA: %s", tabulka[i].znacka);
-        for (int j = 0; j < 5; j++){
-            printf("\nCAS%d: %.3f", j, tabulka[i].casy[j]);
+    printf("\n");
+    for(size_t i=0; i < velkost; i++){
+        // Vo výpise automobilu kapitalizujem prvé písmenko značky
+        printf("%s %s, nar. %d, %s, Automobil: %c%s", tabulka[i].meno, tabulka[i].priezvisko, tabulka[i].rok, tabulka[i].pohlavie == 'm' ? "muz" : "zena", (tabulka[i].znacka[0]-32),tabulka[i].znacka+1);
+        printf("\nCasy okruhov: ");
+        size_t j = 0;
+        for (j = 0; j < 4; j++){
+            printf("%.3f;", tabulka[i].casy[j]);
         }
-        
+        // Na konci zoznamu nedáme medzeru lebo v maine na konci funkcie dávam medzeru resp. Zamedzuje dvom medzerám
+        if(i+1 != velkost){
+            printf("%.3f\n", tabulka[i].casy[j]); 
+        }
+        else{
+            printf("%.3f", tabulka[i].casy[j]); 
+        }
     }
 }
