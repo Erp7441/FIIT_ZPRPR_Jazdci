@@ -39,6 +39,7 @@ typedef struct jazdec{
 
 void nacitatJazdcov(jazdec** tabulka, size_t* velkost);
 int pocetMedzier(char* retazec); // Získa počet medzier v reťazci
+int bJeCislo(char* retazec, int bFloat); // Skontroluje či je reťazec čislo
 
 //*-------------------------------------------------- Hlavné funkcie --------------------------------------------------
 
@@ -61,7 +62,7 @@ int main(){
 //*------------------------------------------------------- Menu -------------------------------------------------------
 
     do{
-        //TODO oramovať menu (pripadne spraviť reusable funkciu pre menu)
+        // TODO oramovať menu (pripadne spraviť reusable funkciu pre menu)
         printf("\n\ns - Sum\nd - Driver\nl - Lap\ng - Gender\nb - Brand\ny - Year\na - Average\nu - Under\nc - Change\nn - New Driver\nr - Remove Driver\nr - Reload\ne - Exit");
         printf("\nVolba: ");
         scanf_s("%c", &vyber, 1);
@@ -208,6 +209,7 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
     if((fopen_s(&subor, "jazdci.csv", "r+")) != 0){
         char* chybovaHlaska = (char*)calloc(256, sizeof(char));
         strerror_s(chybovaHlaska,256,(int)errno); // Konvertujem error kód na hlášku
+        printf("\nSubor nie je mozne precitat");
         printf("\nNemozno otvorit subor jazdci.csv\nChybovy kod %d -> %s", (int)errno,chybovaHlaska);
         free(chybovaHlaska);
         exit(EXIT_FAILURE);
@@ -216,13 +218,24 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
 //*------------------------------------------------ Čítanie zo súboru -------------------------------------------------
 
     while(fgets(riadok, 100, subor)){
-
+        
         //*---------------------------------------------- Inicializácia -----------------------------------------------
         
         (*velkost)++;
         char* dalsi = NULL;
         char* udaj = NULL;
-        
+        int pocetBodkociariek = 0;
+
+        for (size_t i = 0; i < strlen(riadok); i++){
+            if(riadok[i] == ';'){
+                pocetBodkociariek++;
+            }
+        }
+        if(pocetBodkociariek != 8){
+            printf("\nSubor nie je mozne precitat");
+            printf("\nChybaju udaje v riadku cislo %zu", (*velkost));
+            exit(EXIT_FAILURE);
+        }
 
         // Inicializujem dynamické polia a kontrolujem úspešnosť alokácie
         if(
@@ -315,15 +328,12 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
                 }
                 break;
             case 2:
-                /*
-                    TODO Vyriešiť prípady “a1968”, “1a968”, “19a68”, “196a8”, a “1968a”
-                    ? Podfunkcia na kontrolovanie ci každé písmeno z reťazca je čislo
-                */
-                if(sscanf_s(udaj, "%d", &(*tabulka)[(*velkost)-1].rok, sizeof(int)) != 1){
+                if(bJeCislo(udaj, 0) == 0){
                     printf("\nSubor nie je mozne precitat");
                     printf("\nChybny rok narodenia pri jazdcovi cislo %zu: %s %s -> '%s'", (*velkost), (*tabulka)[(*velkost)-1].meno, (*tabulka)[(*velkost)-1].priezvisko, udaj);
                     exit(EXIT_FAILURE);
                 }
+                sscanf_s(udaj, "%d", &(*tabulka)[(*velkost)-1].rok, sizeof(int));
                 break;
             case 3:
                 if(!((*tabulka)[(*velkost)-1].znacka = (char*) calloc(strlen(udaj), sizeof(char)))){
@@ -337,15 +347,15 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
                 break;
             case 4: case 5: case 6: case 7: case 8:
                 for (size_t j = 0; udaj != NULL && j < 5; j++){
-                    /*
-                        TODO Vyriešiť prípady "a76.343", "7a6.343", "76a.343", "76.a343", "76.3a43", "76.34a3" a "76.343a"
-                        ? Podfunkcia na kontrolovanie ci každé písmeno z reťazca je čislo
-                    */
-                    if(sscanf_s(udaj, "%f", &(*tabulka)[(*velkost)-1].casy[j], sizeof(float)) != 1){
+                    if(udaj[strlen(udaj) - 1] == '\n'){ // Odstránim "\n" z posledného času aby mohol zistiť či "udaj" číslo
+                        udaj[strlen(udaj) - 1] = '\0'; // Nahradím "\n" znakom konca reťazca
+                    }
+                    if(bJeCislo(udaj, 1) == 0){ // Zistím či je "udaj" číslo
                         printf("\nSubor nie je mozne precitat");
                         printf("\nChybny cas pri jazdcovi cislo %zu: %s %s -> '%s'", (*velkost), (*tabulka)[(*velkost)-1].meno, (*tabulka)[(*velkost)-1].priezvisko, udaj);
                         exit(EXIT_FAILURE);
                     }
+                    sscanf_s(udaj, "%f", &(*tabulka)[(*velkost)-1].casy[j], sizeof(float));
                     udaj = strtok_s(NULL, ";", &dalsi);
                 }
                 break;
@@ -366,6 +376,30 @@ int pocetMedzier(char* retazec){
         }
     }
     return medzera;
+}
+
+int bJeCislo(char* retazec, int bFloat){
+    int bodka = 0;
+
+    if(bFloat != 0 && bFloat != 1){
+        printf("\nNespravny typ cisla");
+        exit(EXIT_FAILURE);
+    }
+
+    for (size_t i = 0; i < strlen(retazec); i++)
+    {
+        if(retazec[i] == '.'){ bodka++; } // Kontrolujem počet bodiek v reťazci
+        if(
+            (retazec[i] > '9' || retazec[i] < '0') // Pokiaľ znak reťazca nie je číslo...
+            && retazec[i] != '.' // ...a nie je ani bodka...
+            || bodka > 1  // ...alebo mám viac ako 1 bodku...
+            || (bFloat == 0 && bodka != 0) // ...alebo mám bodku pri celom čísle...
+        ){
+            return 0; //...tak false
+        }
+        
+    }
+    return 1;
 }
 
 void sum(jazdec* tabulka, size_t velkost){
