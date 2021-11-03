@@ -45,6 +45,7 @@ int bJeCislo(char* retazec, int bFloat); // Skontroluje či je reťazec čislo
 
 void podpis(char const* zadanie, char const* meno, char const* aisID);
 void sum(jazdec* tabulka, size_t velkost);
+void driver(jazdec* tabulka, size_t velkost);
 
 int main(){
 
@@ -71,17 +72,20 @@ int main(){
             case 's':
                 sum(tabulka, velkost);
                 break;
+            case 'd':
+                driver(tabulka, velkost);
+                break;
             case 'r':
                 nacitatJazdcov(&tabulka, &velkost);
                 break;
-            case 'e':
+            case 'x':
                 free(tabulka);
                 break;
             default:
                 printf("\nChyba: Zly vyber");
                 break;
         }
-    } while (vyber != 'e');
+    } while (vyber != 'x');
 
 
     getchar();
@@ -89,6 +93,8 @@ int main(){
 }
 
 void podpis(char const* zadanie, char const* meno, char const* aisID){
+
+    // TODO Potiahnúť si array stringov, tie cyklicky vytlačiť na obrazovku rovnako ako tie 3 stringy predtým.
 
 //*-------------------------------------------------- Dĺžka reťazca ---------------------------------------------------
 
@@ -180,7 +186,30 @@ void podpis(char const* zadanie, char const* meno, char const* aisID){
 }
 
 void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
-    
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // 1. Štart
+    // 2. Zadeklarujem si ukazovatele "tabulka", "velkost", "subor" a premennú "riadok"
+    // 3. Inicializujem premenné a ukazovatele
+        // "subor" -> zatiaľ na prázdnu hodnotu
+        // "riadok" -> zatiaľ na prázdnu hodnotu
+        // "tabulka" -> zatiaľ na prázdnu hodnotu
+        // "velkosť" -> 0
+    // 4. Alokujem si dynamické pole "tabulka"
+    // 5. Otvorím si súbor pomocou ukazovateľa "subor"
+    // 6. Čítam súbor riadok po riadku pričom...
+        // 6.1. Prečítam riadok
+        // 6.2 Mám dosť údajov v riadku?
+            // TRUE: Pokračujem ďalej
+            // FALSE: Skončím program
+        // 6.3 Zväčším pomocou premennej "velkost" dynamické pole o jedného jazdca
+        // 6.4. Rozseknem ho podla bodkočiarky
+        // 6.5. Mám správne zadefinované údaje v riadku?
+            // TRUE: Zapíšem údaje postupne nahrávam do poľa "tabulka"
+            // FALSE: Skončím program
+    // 9. Stop
+
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
     FILE* subor;
@@ -254,7 +283,7 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
         strcpy_s(udaj, 100, riadok);
         udaj = strtok_s(udaj, ";", &dalsi); // Strtok rozdelí reťazec na niekoľko častí oddelene ";"
 
-        //*------------------------------------  Kontrola, či jazdec nemá stredné meno ---------------------------------
+        //*----------------------------------- Kontrola, či jazdec nemá stredné meno -----------------------------------
 
         if(pocetMedzier(udaj)>1){
 
@@ -271,7 +300,7 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
 
             udaj = strtok_s(udaj, " ", &dalsi);  // Rozseknem si údaj na menšie
             
-            //*--------------------------------------- Rozdelenie mena a priezviska ------------------------------------
+            //*-------------------------------------- Rozdelenie mena a priezviska -------------------------------------
             
             for (size_t i = 0; udaj != NULL; i++){
                 // Spravím si kópiu aktuálneho údaja
@@ -303,8 +332,8 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
             strcpy_s((*tabulka)[(*velkost)-1].priezvisko, 100, udaj);
             udaj = strtok_s(NULL, ";", &dalsi);
         }
-        
-        //*----------------------------------------  Nahranie zvyšných údajov -----------------------------------------
+
+        //*---------------------------------------- Nahranie zvyšných údajov ---------------------------------------
 
         // ...nemusím uvoľňovať údaj lebo pri prechádzaní tokenov reťazca sa staré sami zmažú
         if(!(udaj = (char*)calloc(100,sizeof(char)))){ // TODO Cppcheck false positive...
@@ -369,7 +398,27 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
 }
 
 int pocetMedzier(char* retazec){
-    int medzera = 0;  
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // 1. Štart
+    // 2. Zadeklarujem si ukazovateľ "retazec" a premennú "medzera"
+    // 3. Inicializujem premennú a ukazovateľ
+        // "retazec" -> na hodnotu reťazca ktorý budem kontrolovať
+        // "medzera" -> 0
+    // 3. Prejsť celý reťazec znak po znaku až do konca reťazca
+    // 4. Je znak medzera?
+        // TRUE: Tak prirátam k premennej medzera jednotku
+        // FALSE: Pokračujem ďalej
+    // 5. Vrátim premennú medzera
+    // 6. Stop
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    int medzera = 0;  // Sledovanie počtu medzier v reťazci
+
+//*--------------------------------------------- Kontrola znaku v reťazci ---------------------------------------------
+
     for(size_t i = 0; i < strlen(retazec); i++){
         if(retazec[i]==' '){
             medzera++;
@@ -379,30 +428,73 @@ int pocetMedzier(char* retazec){
 }
 
 int bJeCislo(char* retazec, int bFloat){
-    int bodka = 0;
 
-    if(bFloat != 0 && bFloat != 1){
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // TODO Vylepšiť tak aby vedelo vyhodnotiť narp. 10,000 ako 10000
+
+    // 1. Štart
+    // 2. Zadeklarujem si ukazovateľ "retazec" a premenné "bFloat", "bodka"
+    // 3. Inicializujem premenné a ukazovateľ
+        // "retazec" -> na hodnotu reťazca ktorý budem kontrolovať
+        // "bFloat" -> na hodnotu true (1) alebo false (0) podla toho či pracujem s celým alebo desatinným číslom
+        // "bodka" -> 0
+    // 4. Prejdem celý reťazec znak po znaku až do konca reťazca
+    // 5. Je znak bodka?
+        // TRUE: Pripočítam k premennej bodka jednotku a pokračujem ďalej
+        // FALSE: Pokračujem ďalej
+    // 6. Je znak číslo?
+        // TRUE: Pokračujem ďalej
+        // FALSE: Vrátim hodnotu "false"
+    // 7. Mám viacej ako jednu bodku v reťazci?
+        // TRUE: Vrátim hodnotu "false"
+        // FALSE: Pokračujem ďalej
+    // 8. Mám bodku pri celom čísle?
+        // TRUE: Vrátim hodnotu "false"
+        // FALSE: Pokračujem ďalej
+    // 9. Stop
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    int bodka = 0; // Sledovanie počtu bodiek v reťazci
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    // bFloat slúži na kontrolu či pracujem s desatinným čislom 
+    if(bFloat != 0 && bFloat != 1){ // Môže nadobúdať hodnotu "true" (1) alebo "false" (0)
         printf("\nNespravny typ cisla");
         exit(EXIT_FAILURE);
     }
+
+//*------------------------------------- Kontrola či každý znak v reťazci je číslo ------------------------------------
 
     for (size_t i = 0; i < strlen(retazec); i++)
     {
         if(retazec[i] == '.'){ bodka++; } // Kontrolujem počet bodiek v reťazci
         if(
             (retazec[i] > '9' || retazec[i] < '0') // Pokiaľ znak reťazca nie je číslo...
-            && retazec[i] != '.' // ...a nie je ani bodka...
+            && (retazec[i] != '.' // ...a nie je ani bodka...
             || bodka > 1  // ...alebo mám viac ako 1 bodku...
-            || (bFloat == 0 && bodka != 0) // ...alebo mám bodku pri celom čísle...
+            || (bFloat == 0 && bodka != 0)) // ...alebo mám bodku pri celom čísle...
         ){
-            return 0; //...tak false
+            return 0; // ...tak false...
         }
         
     }
-    return 1;
+    return 1; // ...inak true
 }
 
 void sum(jazdec* tabulka, size_t velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // TODO Spraviť predelenia
+
+    // 1. Štart
+    // 2. Prejsť celé pole jazdcov
+    // 3. Urobiť formátovaný výpis každého jazdca
+    // 5. Stop
+
     printf("\n");
     for(size_t i=0; i < velkost; i++){
         // Vo výpise automobilu kapitalizujem prvé písmenko značky
@@ -418,6 +510,37 @@ void sum(jazdec* tabulka, size_t velkost){
         }
         else{
             printf("%.3f", tabulka[i].casy[j]); 
+        }
+    }
+}
+
+void driver(jazdec* tabulka, size_t velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // 1. Štart
+    // 2. Prejsť celé pole jazdcov
+    // 3. Podla priezviska vyhľadať index jazdca
+    // 4. Existuje jazdec?
+        // TRUE: Tak urobím formátovaný výpis jazdca pomocou jeho nájdeného indexu
+        // FALSE: vypíšeme jazdec chybovú hlášku napr. "Jazdec nenajdeny"
+    // 5. Stop
+
+    printf("\n");
+    for(size_t i=0; i < velkost; i++){
+        // Vo výpise automobilu kapitalizujem prvé písmenko značky
+        printf("%s %s, nar. %d, %s, Automobil: %c%s", tabulka[i].meno, tabulka[i].priezvisko, tabulka[i].rok, tabulka[i].pohlavie == 'm' ? "muz" : "zena", (tabulka[i].znacka[0]-32),tabulka[i].znacka+1);
+        printf("\nCasy okruhov: ");
+        size_t j = 0;
+        for (j = 0; j < 4; j++){
+            printf("%.3f;", tabulka[i].casy[j]);
+        }
+        // Na konci zoznamu nedáme medzeru lebo v maine na konci funkcie dávam medzeru resp. Zamedzuje dvom medzerám
+        if(i+1 != velkost){
+            printf("%.3f\n", tabulka[i].casy[j]);
+        }
+        else{
+            printf("%.3f", tabulka[i].casy[j]);
         }
     }
 }
