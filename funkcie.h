@@ -455,6 +455,10 @@ void sum(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------- Formátovaný výpis ------------------------------------------------
 
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
     printf("\n");
     for(size_t i = 0; i < velkost; i++){
         // Vo výpise automobilu kapitalizujem prvé písmenko značky
@@ -503,6 +507,10 @@ void driver(jazdec* tabulka, size_t velkost){
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
     if(!(priezviskoJazdca = (char *)calloc(100, sizeof(char)))){
         char* chybovaHlaska = (char*)calloc(256, sizeof(char));
         strerror_s(chybovaHlaska,256,(int)errno); // Konvertujem error kód na hlášku
@@ -561,4 +569,51 @@ void driver(jazdec* tabulka, size_t velkost){
     }
 
     free(priezviskoJazdca);
+}
+
+void lap(jazdec* tabulka, size_t velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // 1. Štart
+    // 2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca" a "indexCasu"
+    // 3. Inicializujem premennú
+        // "najlepsiCas" -> na hodnotu prvého času prvého jazdca
+        // "indexJazdca" -> na hodnotu 0
+        // "indexCasu" -> na hodnotu 0
+    // 3. Prejdem celé pole jazdcov pričom sledujem ich čas
+    // 4. Je čas menší než môj uložený?
+        // TRUE: 
+            // Tak nastavím premennú "najlepsiCas" na aktuálny čas...
+            // ...nastavím premennú "indexJazdca" na aktuálny index jazdca
+            // ...a nastavím premennú "indexCasu" na aktuálny index čas
+        // FALSE: Pokračujem ďalej
+    // 5. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
+    // 6. Stop
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    float najlepsiCas = tabulka[0].casy[0];
+    int indexJazdca = 0, indexCasu = 0;
+
+//*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
+
+    printf("\n");
+    for(size_t i = 0; i < velkost; i++){
+        for(size_t j = 0; j < 5; j++) {
+            if(tabulka[i].casy[j] < najlepsiCas){
+                najlepsiCas = tabulka[i].casy[j];
+                indexJazdca = i;
+                indexCasu = j;
+            }
+        }
+    }
+    printf("Najlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno, tabulka[indexJazdca].priezvisko, indexCasu+1);
 }

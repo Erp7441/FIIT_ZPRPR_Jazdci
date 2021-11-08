@@ -51,6 +51,9 @@ int main(){
             case 'd':
                 driver(tabulka, velkost);
                 break;
+            case 'l':
+                lap(tabulka, velkost);
+                break;
             case 'r':
                 nacitatJazdcov(&tabulka, &velkost);
                 break;
