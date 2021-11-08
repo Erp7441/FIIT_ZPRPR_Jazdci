@@ -57,11 +57,18 @@ int main(){
             case 'g':
                 gender(tabulka, velkost);
                 break;
+            case 'b':
+                brand(tabulka, velkost);
+                break;
+            case 'y':
+                year(tabulka, velkost);
+                break;
             case 'r':
+                // TODO spamovanie reloadu crashne program
                 nacitatJazdcov(&tabulka, &velkost);
                 break;
             case 'x':
-                free(tabulka);
+                free(tabulka); // TODO free crashne program
                 break;
             default:
                 printf("\nChyba: Zly vyber");

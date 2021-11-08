@@ -159,6 +159,33 @@ int pocetMedzier(char* retazec){
     return medzera;
 }
 
+// Získa počet číslic v čísle
+int pocetCislic(int cislo){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // 1. Štart
+    // 2. Zadeklarujem si premennú "pocet"
+    // 3. Inicializujem premennú
+        // "pocet" -> 0
+    // 4. Cyklom delím číslo desiatimi dokým nedostanem 0
+    // 5. Vrátim počet otáčok cyklu
+    // 6. Stop
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    int pocet = 0;
+
+//*----------------------------------------------- Počet číslic v čísle -----------------------------------------------
+
+    do {
+        cislo /= 10;
+        pocet++;
+    } while (cislo != 0);
+
+    return pocet;
+}
+
 // Skontroluje či je reťazec čislo
 int bJeCislo(char* retazec, int bFloat){
 
@@ -406,6 +433,12 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
                     exit(EXIT_FAILURE);
                 }
                 sscanf_s(udaj, "%d", &(*tabulka)[(*velkost)-1].rok, sizeof(int));
+                if(pocetCislic((*tabulka)[(*velkost)-1].rok) != 4){
+                    printf("\nSubor nie je mozne precitat");
+                    printf("\nChybny rok narodenia pri jazdcovi cislo %zu: %s %s -> '%s'", (*velkost), (*tabulka)[(*velkost)-1].meno, (*tabulka)[(*velkost)-1].priezvisko, udaj);
+                    getchar();
+                    exit(EXIT_FAILURE);
+                }
                 break;
             case 3:
                 if(!((*tabulka)[(*velkost)-1].znacka = (char*) calloc(strlen(udaj), sizeof(char)))){
@@ -504,7 +537,7 @@ void driver(jazdec* tabulka, size_t velkost){
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
-    char * priezviskoJazdca = NULL;
+    char* priezviskoJazdca = NULL;
     int bUspech = 0;
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
@@ -581,11 +614,11 @@ void lap(jazdec* tabulka, size_t velkost){
     // 1. Štart
     // 2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca" a "indexCasu"
     // 3. Inicializujem premennú
-        // "najlepsiCas" -> na hodnotu prvého času prvého jazdca
+        // "najlepsiCas" -> na hodnotu 0
         // "indexJazdca" -> na hodnotu 0
         // "indexCasu" -> na hodnotu 0
     // 4. Prejdem celé pole jazdcov pričom sledujem ich čas
-    // 5. Je čas menší než môj uložený?
+    // 5. Nie je premenná "najlepsiCas" inicializovaná alebo je čas menší než môj uložený?
         // TRUE: 
             // Tak nastavím premennú "najlepsiCas" na aktuálny čas...
             // ...nastavím premennú "indexJazdca" na aktuálny index jazdca
@@ -596,7 +629,7 @@ void lap(jazdec* tabulka, size_t velkost){
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
-    float najlepsiCas;
+    float najlepsiCas = 0.f;
     int indexJazdca = 0, indexCasu = 0;
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
@@ -608,10 +641,9 @@ void lap(jazdec* tabulka, size_t velkost){
 
 //*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
 
-    najlepsiCas = tabulka[0].casy[0];
     for(size_t i = 0; i < velkost; i++){
         for(size_t j = 0; j < 5; j++) {
-            if(tabulka[i].casy[j] < najlepsiCas){
+            if(najlepsiCas == 0.f || tabulka[i].casy[j] < najlepsiCas){
                 najlepsiCas = tabulka[i].casy[j];
                 indexJazdca = i;
                 indexCasu = j;
@@ -626,10 +658,11 @@ void gender(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
+    // TODO Upravit?
     // 1. Štart
     // 2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca", "indexCasu" a "pohlavie"
     // 3. Inicializujem premennú
-        // "najlepsiCas" -> na hodnotu prvého času prvého jazdca
+        // "najlepsiCas" -> na hodnotu 0
         // "indexJazdca" -> na hodnotu 0
         // "indexCasu" -> na hodnotu 0
         // "pohlavie" -> zatiaľ na prázdnu hodnotu
@@ -638,7 +671,8 @@ void gender(jazdec* tabulka, size_t velkost){
         // TRUE: Pokračujem ďalej
         // FALSE: Skončím program
     // 6. Prejdem celé pole jazdcov pričom sledujem ich čas a pohlavie
-    // 7. Je čas menší než môj uložený a zároveň je pohlavie jazdca rovné premennej "pohlavie"?
+    /* 7. Nie je premenná "najlepsiCas" inicializovaná alebo je čas menší než môj uložený a zároveň...
+    ...je pohlavie jazdca rovné premennej "pohlavie"? */
         // TRUE: 
             // Tak nastavím premennú "najlepsiCas" na aktuálny čas...
             // ...nastavím premennú "indexJazdca" na aktuálny index jazdca
@@ -649,7 +683,7 @@ void gender(jazdec* tabulka, size_t velkost){
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
-    float najlepsiCas;
+    float najlepsiCas = 0.f;
     int indexJazdca = 0, indexCasu = 0;
     char pohlavie;
 
@@ -671,10 +705,9 @@ void gender(jazdec* tabulka, size_t velkost){
 
 //*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
 
-    najlepsiCas = tabulka[0].casy[0];
     for(size_t i = 0; i < velkost; i++){
         for(size_t j = 0; j < 5; j++) {
-            if(tabulka[i].casy[j] < najlepsiCas && tabulka[i].pohlavie == pohlavie){
+            if((najlepsiCas == 0.f || tabulka[i].casy[j] < najlepsiCas) && tabulka[i].pohlavie == pohlavie){
                 najlepsiCas = tabulka[i].casy[j];
                 indexJazdca = i;
                 indexCasu = j;
@@ -682,4 +715,132 @@ void gender(jazdec* tabulka, size_t velkost){
         }
     }
     printf("\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno, tabulka[indexJazdca].priezvisko, indexCasu+1);
+}
+
+// Formátovaný výpis najlepšieho kola pre jednotlivé značky aut
+void brand(jazdec* tabulka, size_t velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // TODO upravit
+    // 1. Štart
+    // 2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca", "indexCasu" a ukazovateľ "znacka"
+    // 3. Inicializujem premennú
+        // "najlepsiCas" -> na hodnotu prvého času prvého jazdca
+        // "indexJazdca" -> na hodnotu 0
+        // "indexCasu" -> na hodnotu 0
+        // "znacka" -> zatiaľ na prázdnu hodnotu
+    // 6. Prejdem celé pole jazdcov pričom sledujem ich čas a značku
+    // 7. Je čas menší než môj uložený a zároveň je značka auta jazdca rovná ukazovatelu "znacka"?
+        // TRUE: 
+            // Tak nastavím premennú "najlepsiCas" na aktuálny čas...
+            // ...nastavím premennú "indexJazdca" na aktuálny index jazdca
+            // ...a nastavím premennú "indexCasu" na aktuálny index čas
+        // FALSE: Pokračujem ďalej
+    // 8. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
+    // 9. Stop
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    int indexJazdca = 0, indexCasu = 0;
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+
+//*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
+
+    // TODO treba si sledovat predchadzajuce znacky aut na to aby sa mi viac krat neopakovali vypisi
+     // Toto by mohlo byt docielene dvoj rozmerným dynamickým polom ktoré pokaždé čo spravím výpis na značku si zapíšem...
+     // ...danú značku ako vybavenú a ďalej ju vypisovať nebude.
+
+    for (size_t x = 0; x < velkost; x++){
+        float najlepsiCas = 0.f;
+        for(size_t i = 0; i < velkost; i++){
+            for(size_t j = 0; j < 5; j++) {
+                if((najlepsiCas == 0.f || tabulka[i].casy[j] < najlepsiCas) && strcmp(tabulka[i].znacka, tabulka[x].znacka) == 0){
+                    najlepsiCas = tabulka[i].casy[j];
+                    indexJazdca = i;
+                    indexCasu = j;
+                }
+            }
+        }
+        printf("\nZnacka: %c%s\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", (tabulka[indexJazdca].znacka[0]-32)
+        ,tabulka[indexJazdca].znacka+1, tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno, tabulka[indexJazdca].priezvisko
+        , indexCasu+1);
+        if(x < velkost-1){
+            printf("\n");
+        }
+    }  
+}
+
+// Formátovaný výpis najlepšieho kola z jazdcov narodených pred určitým rokom
+void year(jazdec* tabulka, size_t velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // TODO Upravit?
+    // 1. Štart
+    // 2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca", "indexCasu" a "rok"
+    // 3. Inicializujem premennú
+        // "najlepsiCas" -> na hodnotu 0
+        // "indexJazdca" -> na hodnotu 0
+        // "indexCasu" -> na hodnotu 0
+        // "rok" -> zatiaľ na prázdnu hodnotu
+    // 4. Načítam rok z klávesnice do premennej "rok"
+    // 5. Zadal používateľ správnu hodnotu?
+        // TRUE: Pokračujem ďalej
+        // FALSE: Skončím program
+    // 6. Prejdem celé pole jazdcov pričom sledujem ich čas a rok narodenia
+    /* 7. Nie je premenná "najlepsiCas" inicializovaná alebo je čas menší než môj uložený a zároveň...
+    ...je rok jazdca menší ako premenná "rok"? */
+        // TRUE: 
+            // Tak nastavím premennú "najlepsiCas" na aktuálny čas...
+            // ...nastavím premennú "indexJazdca" na aktuálny index jazdca
+            // ...a nastavím premennú "indexCasu" na aktuálny index čas
+        // FALSE: Pokračujem ďalej
+    // 8. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
+    // 9. Stop
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    float najlepsiCas = 0.f;
+    int indexJazdca = 0, indexCasu = 0, rok = 0;
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    printf("\nZadajte rok narodenia jazdca: ");
+    scanf_s("%d", &rok, 4);
+    getchar();
+
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+
+    if(pocetCislic(rok) != 4){
+        printf("\nZadali ste nespravny rok");
+        return;
+    }
+
+//*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
+
+    for(size_t i = 0; i < velkost; i++){
+        for(size_t j = 0; j < 5; j++) {
+            if((najlepsiCas == 0.f || tabulka[i].casy[j] < najlepsiCas) && tabulka[i].rok < rok){
+                najlepsiCas = tabulka[i].casy[j];
+                indexJazdca = i;
+                indexCasu = j;
+            }
+        }
+    }
+    if(najlepsiCas != 0.f){
+        printf("\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno, tabulka[indexJazdca].priezvisko, indexCasu+1);
+    }
+    else{
+        printf("\nJazdec nenajdeny");
+    }
 }
