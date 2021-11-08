@@ -63,6 +63,9 @@ int main(){
             case 'y':
                 year(tabulka, velkost);
                 break;
+            case 'a':
+                average(tabulka, velkost);
+                break;
             case 'r':
                 // TODO spamovanie reloadu crashne program
                 nacitatJazdcov(&tabulka, &velkost);

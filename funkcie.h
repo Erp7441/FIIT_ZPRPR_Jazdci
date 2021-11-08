@@ -844,3 +844,61 @@ void year(jazdec* tabulka, size_t velkost){
         printf("\nJazdec nenajdeny");
     }
 }
+
+void average(jazdec* tabulka, size_t velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // TODO dorobiť popis
+    // 1. Štart
+    // 2. Zadeklarujem si ukazovateľ "priezviskoJazdca" a premennú "bUspech"
+    // 3. Inicializujem premennú a ukazovateľ
+        // "priezviskoJazdca" -> zatiaľ na prázdnu hodnotu
+        // "bUspech" -> na hodnotu false (0)
+    // 4. Alokujem dynamické pole "priezviskoJazdca"
+    // 5. Načítam priezvisko z klávesnice do pola "priezviskoJazdca"
+    // 6. Prejdem celé pole jazdcov
+    // 7. Podla priezviska vyhľadam jazdca
+    // 8. Existuje jazdec?
+        // TRUE: Tak nastavím premennú "bUspech" na true (1) a urobím formátovaný výpis jazdca
+        // FALSE: Vypíšeme chybovú hlášku napr. "Jazdec nenajdeny"
+    // 9. Stop
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+
+//*-------------------------------------------------- Hladanie jazdca -------------------------------------------------
+
+    float najlepsiPriemer = 0.f;
+    int najlepsiPriemerIndex = 0;
+    for(size_t i = 0; i < velkost; i++){
+        //*----------------------------------------------- Premenné -----------------------------------------------
+
+        size_t j = 0;
+        float najlepsiCas = tabulka[i].casy[0],  priemernyCas = 0.f, najhorsiCas = 0.f;
+
+        //*---------------------------------------------- Výpis časov ---------------------------------------------
+
+        for (j = 0; j < 5; j++){
+            if(tabulka[i].casy[j] < najlepsiCas){
+                najlepsiCas = tabulka[i].casy[j];
+            }
+            if(tabulka[i].casy[j] > najhorsiCas){
+                najhorsiCas = tabulka[i].casy[j];
+            }
+            priemernyCas += tabulka[i].casy[j];
+        }
+
+        priemernyCas /= j;
+        if(najlepsiPriemer == 0.f || priemernyCas < najlepsiPriemer){
+            najlepsiPriemer = priemernyCas;
+            najlepsiPriemerIndex = i;
+        }
+        printf("\n%s %s - %.3f", tabulka[i].meno, tabulka[i].priezvisko, priemernyCas);
+    }
+    printf("\n\nNajlepsie:\n%s %s - %.3f", tabulka[najlepsiPriemerIndex].meno, tabulka[najlepsiPriemerIndex].priezvisko, najlepsiPriemer);
+}
