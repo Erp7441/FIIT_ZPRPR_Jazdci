@@ -8,6 +8,8 @@
 
 */
 
+// TODO Zmazať prebytočne printf("\n"); príkazy kde sa to môže
+
 //*---------------------------------------------------- Preprocesor ---------------------------------------------------
 
 // Program bol naprogramovaný v Visual Studio Code s GCC kompilátorom
@@ -571,6 +573,7 @@ void driver(jazdec* tabulka, size_t velkost){
     free(priezviskoJazdca);
 }
 
+// Formátovaný výpis najlepšieho kola jazdcov
 void lap(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
@@ -581,15 +584,20 @@ void lap(jazdec* tabulka, size_t velkost){
         // "najlepsiCas" -> na hodnotu prvého času prvého jazdca
         // "indexJazdca" -> na hodnotu 0
         // "indexCasu" -> na hodnotu 0
-    // 3. Prejdem celé pole jazdcov pričom sledujem ich čas
-    // 4. Je čas menší než môj uložený?
+    // 4. Prejdem celé pole jazdcov pričom sledujem ich čas
+    // 5. Je čas menší než môj uložený?
         // TRUE: 
             // Tak nastavím premennú "najlepsiCas" na aktuálny čas...
             // ...nastavím premennú "indexJazdca" na aktuálny index jazdca
             // ...a nastavím premennú "indexCasu" na aktuálny index čas
         // FALSE: Pokračujem ďalej
-    // 5. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
-    // 6. Stop
+    // 6. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
+    // 7. Stop
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    float najlepsiCas;
+    int indexJazdca = 0, indexCasu = 0;
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
@@ -598,14 +606,9 @@ void lap(jazdec* tabulka, size_t velkost){
         return;
     }
 
-//*----------------------------------------------------- Premenné -----------------------------------------------------
-
-    float najlepsiCas = tabulka[0].casy[0];
-    int indexJazdca = 0, indexCasu = 0;
-
 //*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
 
-    printf("\n");
+    najlepsiCas = tabulka[0].casy[0];
     for(size_t i = 0; i < velkost; i++){
         for(size_t j = 0; j < 5; j++) {
             if(tabulka[i].casy[j] < najlepsiCas){
@@ -615,5 +618,68 @@ void lap(jazdec* tabulka, size_t velkost){
             }
         }
     }
-    printf("Najlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno, tabulka[indexJazdca].priezvisko, indexCasu+1);
+    printf("\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno, tabulka[indexJazdca].priezvisko, indexCasu+1);
+}
+
+// Formátovaný výpis najlepšieho kola z jazdcov daného pohlavia
+void gender(jazdec* tabulka, size_t velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // 1. Štart
+    // 2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca", "indexCasu" a "pohlavie"
+    // 3. Inicializujem premennú
+        // "najlepsiCas" -> na hodnotu prvého času prvého jazdca
+        // "indexJazdca" -> na hodnotu 0
+        // "indexCasu" -> na hodnotu 0
+        // "pohlavie" -> zatiaľ na prázdnu hodnotu
+    // 4. Načítam pohlavie z klávesnice do premennej "pohlavie"
+    // 5. Zadal používateľ správnu hodnotu?
+        // TRUE: Pokračujem ďalej
+        // FALSE: Skončím program
+    // 6. Prejdem celé pole jazdcov pričom sledujem ich čas a pohlavie
+    // 7. Je čas menší než môj uložený a zároveň je pohlavie jazdca rovné premennej "pohlavie"?
+        // TRUE: 
+            // Tak nastavím premennú "najlepsiCas" na aktuálny čas...
+            // ...nastavím premennú "indexJazdca" na aktuálny index jazdca
+            // ...a nastavím premennú "indexCasu" na aktuálny index čas
+        // FALSE: Pokračujem ďalej
+    // 8. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
+    // 9. Stop
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    float najlepsiCas;
+    int indexJazdca = 0, indexCasu = 0;
+    char pohlavie;
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    printf("\nZadajte pohlavie jazdca (m/f): ");
+    scanf_s("%c", &pohlavie, 1);
+    getchar();
+
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+
+    if(pohlavie != 'm' && pohlavie != 'f'){
+        printf("\nZadali ste nespravne pohlavie");
+        return;
+    }
+
+//*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
+
+    najlepsiCas = tabulka[0].casy[0];
+    for(size_t i = 0; i < velkost; i++){
+        for(size_t j = 0; j < 5; j++) {
+            if(tabulka[i].casy[j] < najlepsiCas && tabulka[i].pohlavie == pohlavie){
+                najlepsiCas = tabulka[i].casy[j];
+                indexJazdca = i;
+                indexCasu = j;
+            }
+        }
+    }
+    printf("\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno, tabulka[indexJazdca].priezvisko, indexCasu+1);
 }

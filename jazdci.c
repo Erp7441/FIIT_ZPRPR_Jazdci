@@ -54,6 +54,9 @@ int main(){
             case 'l':
                 lap(tabulka, velkost);
                 break;
+            case 'g':
+                gender(tabulka, velkost);
+                break;
             case 'r':
                 nacitatJazdcov(&tabulka, &velkost);
                 break;
