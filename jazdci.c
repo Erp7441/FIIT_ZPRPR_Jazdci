@@ -35,7 +35,7 @@ int main(){
         //*----------------------------------------------- Inicializácia ----------------------------------------------
         
         // TODO oramovať menu (pripadne spraviť reusable funkciu pre menu)
-        printf("\n\ns - Sum\nd - Driver\nl - Lap\ng - Gender\nb - Brand\ny - Year\na - Average\nu - Under\nc - Change\nn - New Driver\nr - Remove Driver\nr - Reload\nx - Exit");
+        printf("\n\ns - Sum\nd - Driver\nl - Lap\ng - Gender\nb - Brand\ny - Year\na - Average\nu - Under\nc - Change\nn - New Driver\nr - Remove Driver\nq - Reload\nx - Exit");
         printf("\nVolba: ");
 
         // Medzerou pri "%c" odstránim nadbytočnú medzeru v bufferi pri návrate z funkcie do mainu po zadaní písmenka
@@ -66,12 +66,14 @@ int main(){
             case 'a':
                 average(tabulka, velkost);
                 break;
-            case 'r':
-                // TODO spamovanie reloadu crashne program
+            case 'q':
+                uvolnenieJazdcov(&tabulka);
                 nacitatJazdcov(&tabulka, &velkost);
+                printf("\nObnovujem zoznam jazdcov...");
                 break;
             case 'x':
-                free(tabulka); // TODO free crashne program
+                uvolnenieJazdcov(&tabulka);
+                printf("\nUkoncujem...\n");
                 break;
             default:
                 printf("\nChyba: Zly vyber");

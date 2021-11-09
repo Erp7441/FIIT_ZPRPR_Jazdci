@@ -36,6 +36,7 @@ typedef struct jazdec{
 void podpis(char const* zadanie, char const* meno, char const* aisID){
 
     // TODO Potiahnúť si array stringov, tie cyklicky vytlačiť na obrazovku rovnako ako tie 3 stringy predtým.
+    // TODO Pridať popis
 
 //*-------------------------------------------------- Dĺžka reťazca ---------------------------------------------------
 
@@ -132,17 +133,19 @@ int pocetMedzier(char* retazec){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // 1. Štart
-    // 2. Zadeklarujem si ukazovateľ "retazec" a premennú "medzera"
-    // 3. Inicializujem premennú a ukazovateľ
-        // "retazec" -> na hodnotu reťazca ktorý budem kontrolovať
-        // "medzera" -> 0
-    // 4. Prejdem celý reťazec znak po znaku až do konca reťazca
-    // 5. Je znak medzera?
-        // TRUE: Tak prirátam k premennej medzera jednotku
-        // FALSE: Pokračujem ďalej
-    // 6. Vrátim premennú medzera
-    // 7. Stop
+    /*
+        1. Štart
+        2. Zadeklarujem si ukazovateľ "retazec" a premennú "medzera"
+        3. Inicializujem premennú a ukazovateľ
+            "retazec" -> na hodnotu reťazca ktorý budem kontrolovať
+            "medzera" -> 0
+        4. Prejdem celý reťazec znak po znaku až do konca reťazca
+        5. Je znak medzera?
+            TRUE: Tak prirátam k premennej medzera jednotku
+            FALSE: Pokračujem ďalej
+        6. Vrátim premennú medzera
+        7. Stop
+    */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
@@ -164,13 +167,15 @@ int pocetCislic(int cislo){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // 1. Štart
-    // 2. Zadeklarujem si premennú "pocet"
-    // 3. Inicializujem premennú
-        // "pocet" -> 0
-    // 4. Cyklom delím číslo desiatimi dokým nedostanem 0
-    // 5. Vrátim počet otáčok cyklu
-    // 6. Stop
+    /*
+        1. Štart
+        2. Zadeklarujem si premennú "pocet"
+        3. Inicializujem premennú
+            "pocet" -> 0
+        4. Cyklom delím číslo desiatimi dokým nedostanem 0
+        5. Vrátim počet otáčok cyklu
+        6. Stop
+    */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
@@ -193,26 +198,28 @@ int bJeCislo(char* retazec, int bFloat){
 
     // TODO Vylepšiť tak aby vedelo vyhodnotiť narp. 10,000 ako 10000
 
-    // 1. Štart
-    // 2. Zadeklarujem si ukazovateľ "retazec" a premenné "bFloat", "bodka"
-    // 3. Inicializujem premenné a ukazovateľ
-        // "retazec" -> na hodnotu reťazca ktorý budem kontrolovať
-        // "bFloat" -> na hodnotu true (1) alebo false (0) podla toho či pracujem s celým alebo desatinným číslom
-        // "bodka" -> 0
-    // 4. Prejdem celý reťazec znak po znaku až do konca reťazca
-    // 5. Je znak bodka?
-        // TRUE: Pripočítam k premennej bodka jednotku a pokračujem ďalej
-        // FALSE: Pokračujem ďalej
-    // 6. Je znak číslo?
-        // TRUE: Pokračujem ďalej
-        // FALSE: Vrátim hodnotu "false"
-    // 7. Mám viacej ako jednu bodku v reťazci?
-        // TRUE: Vrátim hodnotu "false"
-        // FALSE: Pokračujem ďalej
-    // 8. Mám bodku pri celom čísle?
-        // TRUE: Vrátim hodnotu "false"
-        // FALSE: Pokračujem ďalej
-    // 9. Stop
+    /*
+        1. Štart
+        2. Zadeklarujem si ukazovateľ "retazec" a premenné "bFloat", "bodka"
+        3. Inicializujem premenné a ukazovateľ
+            "retazec" -> na hodnotu reťazca ktorý budem kontrolovať
+            "bFloat" -> na hodnotu true (1) alebo false (0) podla toho či pracujem s celým alebo desatinným číslom
+            "bodka" -> 0
+        4. Prejdem celý reťazec znak po znaku až do konca reťazca
+        5. Je znak bodka?
+            TRUE: Pripočítam k premennej bodka jednotku a pokračujem ďalej
+            FALSE: Pokračujem ďalej
+        6. Je znak číslo?
+            TRUE: Pokračujem ďalej
+            FALSE: Vrátim hodnotu "false"
+        7. Mám viacej ako jednu bodku v reťazci?
+            TRUE: Vrátim hodnotu "false"
+            FALSE: Pokračujem ďalej
+        8. Mám bodku pri celom čísle?
+            TRUE: Vrátim hodnotu "false"
+            FALSE: Pokračujem ďalej
+        9. Stop
+    */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
@@ -251,26 +258,28 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // 1. Štart
-    // 2. Zadeklarujem si ukazovatele "tabulka", "velkost", "subor" a premennú "riadok"
-    // 3. Inicializujem premenné a ukazovatele
-        // "subor" -> zatiaľ na prázdnu hodnotu
-        // "riadok" -> zatiaľ na prázdnu hodnotu
-        // "tabulka" -> zatiaľ na prázdnu hodnotu
-        // "velkosť" -> 0
-    // 4. Alokujem si dynamické pole "tabulka"
-    // 5. Otvorím si súbor pomocou ukazovateľa "subor"
-    // 6. Čítam súbor riadok po riadku pričom...
-        // 6.1. Prečítam riadok
-        // 6.2 Mám dosť údajov v riadku?
-            // TRUE: Pokračujem ďalej
-            // FALSE: Skončím program
-        // 6.3 Zväčším pomocou premennej "velkost" dynamické pole o jedného jazdca
-        // 6.4. Rozseknem riadok podla bodkočiarky
-        // 6.5. Mám správne zadefinované údaje v riadku?
-            // TRUE: Zapíšem údaje postupne do poľa "tabulka"
-            // FALSE: Skončím program
-    // 7. Stop
+    /*
+        1. Štart
+        2. Zadeklarujem si ukazovatele "tabulka", "velkost", "subor" a premennú "riadok"
+        3. Inicializujem premenné a ukazovatele
+            "subor" -> zatiaľ na prázdnu hodnotu
+            "riadok" -> zatiaľ na prázdnu hodnotu
+            "tabulka" -> zatiaľ na prázdnu hodnotu
+            "velkosť" -> 0
+        4. Alokujem si dynamické pole "tabulka"
+        5. Otvorím si súbor pomocou ukazovateľa "subor"
+        6. Čítam súbor riadok po riadku pričom...
+            6.1. Prečítam riadok
+            6.2 Mám dosť údajov v riadku?
+                TRUE: Pokračujem ďalej
+                FALSE: Skončím program
+            6.3 Zväčším pomocou premennej "velkost" dynamické pole o jedného jazdca
+            6.4. Rozseknem riadok podla bodkočiarky
+            6.5. Mám správne zadefinované údaje v riadku?
+                TRUE: Zapíšem údaje postupne do poľa "tabulka"
+                FALSE: Skončím program
+        7. Stop
+    */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
@@ -288,8 +297,8 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
     // Inicializujem dynamické pole jazdcov, kontrolujem úspešnosť alokácie a otvorenie súboru
     if(!((*tabulka) = (jazdec*)malloc((*velkost) * sizeof(jazdec)))){
         char* chybovaHlaska = (char*)calloc(256, sizeof(char));
-        strerror_s(chybovaHlaska,256,(int)errno); // Konvertujem error kód na hlášku
-        printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno,chybovaHlaska);
+        strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+        printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
         free(chybovaHlaska);
         getchar();
         exit(EXIT_FAILURE);
@@ -300,9 +309,9 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
         // ...Následne sa vypíše na obrazovku chybovú hlásku vygenerovanú podla error kódu
     if((fopen_s(&subor, "jazdci.csv", "r+")) != 0){
         char* chybovaHlaska = (char*)calloc(256, sizeof(char));
-        strerror_s(chybovaHlaska,256,(int)errno); // Konvertujem error kód na hlášku
+        strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
         printf("\nSubor nie je mozne precitat");
-        printf("\nNemozno otvorit subor jazdci.csv\nChybovy kod %d -> %s", (int)errno,chybovaHlaska);
+        printf("\nNemozno otvorit subor jazdci.csv\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
         free(chybovaHlaska);
         getchar();
         exit(EXIT_FAILURE);
@@ -339,8 +348,8 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
             || !((*tabulka)[(*velkost)-1].priezvisko = (char*) calloc(strlen(udaj), sizeof(char)))
         ){
             char* chybovaHlaska = (char*)calloc(256, sizeof(char));
-            strerror_s(chybovaHlaska,256,(int)errno); // Konvertujem error kód na hlášku
-            printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno,chybovaHlaska);
+            strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+            printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
             free(chybovaHlaska);
             getchar();
             exit(EXIT_FAILURE);
@@ -358,8 +367,8 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
             char* posledny = NULL;
             if(!(posledny = (char*)calloc(100,sizeof(char)))){
                 char* chybovaHlaska = (char*)calloc(256, sizeof(char));
-                strerror_s(chybovaHlaska,256,(int)errno); // Konvertujem error kód na hlášku
-                printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno,chybovaHlaska);
+                strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+                printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
                 free(chybovaHlaska);
                 getchar();
                 exit(EXIT_FAILURE);
@@ -405,8 +414,8 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
         // ...nemusím uvoľňovať údaj lebo pri prechádzaní tokenov reťazca sa staré sami zmažú
         if(!(udaj = (char*)calloc(100,sizeof(char)))){ // TODO Cppcheck false positive...
             char* chybovaHlaska = (char*)calloc(256, sizeof(char));
-            strerror_s(chybovaHlaska,256,(int)errno); // Konvertujem error kód na hlášku
-            printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno,chybovaHlaska);
+            strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+            printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
             free(chybovaHlaska);
             getchar();
             exit(EXIT_FAILURE);
@@ -443,8 +452,8 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
             case 3:
                 if(!((*tabulka)[(*velkost)-1].znacka = (char*) calloc(strlen(udaj), sizeof(char)))){
                     char* chybovaHlaska = (char*)calloc(256, sizeof(char));
-                    strerror_s(chybovaHlaska,256,(int)errno); // Konvertujem error kód na hlášku
-                    printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno,chybovaHlaska);
+                    strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+                    printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
                     free(chybovaHlaska);
                     getchar();
                     exit(EXIT_FAILURE);
@@ -476,6 +485,28 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
     fclose(subor);
 }
 
+// Uvoľnenie poľa jazdcov
+void uvolnenieJazdcov(jazdec** tabulka){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    /*
+        1. Štart
+        2. Zadeklarujem si ukazovateľ "tabulka"
+        3. Existuje tabuľka?
+            TRUE: Uvoľním dynamické pole "tabulka" a nastavím hodnotu ukazovateľa na prázdnu hodnotu
+            FALSE: Skončím program
+        4. Stop
+    */
+
+//*------------------------------------------------- Uvoľnenie pamäte -------------------------------------------------
+
+    if(*tabulka){
+        free(*tabulka);
+        *tabulka = NULL;
+    }
+}
+
 //*-------------------------------------------------- Hlavné funkcie --------------------------------------------------
 
 // Formátovaný výpis všetkých jazdcov
@@ -483,10 +514,12 @@ void sum(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // 1. Štart
-    // 2. Prejdem celé pole jazdcov
-    // 3. Urobím formátovaný výpis každého jazdca
-    // 4. Stop
+    /*
+        1. Štart
+        2. Prejdem celé pole jazdcov
+        3. Urobím formátovaný výpis každého jazdca
+        4. Stop
+    */
 
 //*------------------------------------------------- Formátovaný výpis ------------------------------------------------
 
@@ -521,19 +554,21 @@ void driver(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // 1. Štart
-    // 2. Zadeklarujem si ukazovateľ "priezviskoJazdca" a premennú "bUspech"
-    // 3. Inicializujem premennú a ukazovateľ
-        // "priezviskoJazdca" -> zatiaľ na prázdnu hodnotu
-        // "bUspech" -> na hodnotu false (0)
-    // 4. Alokujem dynamické pole "priezviskoJazdca"
-    // 5. Načítam priezvisko z klávesnice do pola "priezviskoJazdca"
-    // 6. Prejdem celé pole jazdcov
-    // 7. Podla priezviska vyhľadam jazdca
-    // 8. Existuje jazdec?
-        // TRUE: Tak nastavím premennú "bUspech" na true (1) a urobím formátovaný výpis jazdca
-        // FALSE: Vypíšeme chybovú hlášku napr. "Jazdec nenajdeny"
-    // 9. Stop
+    /*
+        1. Štart
+        2. Zadeklarujem si ukazovateľ "priezviskoJazdca" a premennú "bUspech"
+        3. Inicializujem premennú a ukazovateľ
+            "priezviskoJazdca" -> zatiaľ na prázdnu hodnotu
+            "bUspech" -> na hodnotu false (0)
+        4. Alokujem dynamické pole "priezviskoJazdca"
+        5. Načítam priezvisko z klávesnice do poľa "priezviskoJazdca"
+        6. Prejdem celé pole jazdcov
+        7. Podla priezviska vyhľadám jazdca
+        8. Existuje jazdec?
+            TRUE: Tak nastavím premennú "bUspech" na true (1) a urobím formátovaný výpis jazdca
+            FALSE: Vypíšeme chybovú hlášku napr. "Jazdec nenajdeny"
+        9. Stop
+    */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
@@ -548,8 +583,8 @@ void driver(jazdec* tabulka, size_t velkost){
     }
     if(!(priezviskoJazdca = (char *)calloc(100, sizeof(char)))){
         char* chybovaHlaska = (char*)calloc(256, sizeof(char));
-        strerror_s(chybovaHlaska,256,(int)errno); // Konvertujem error kód na hlášku
-        printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno,chybovaHlaska);
+        strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+        printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
         free(chybovaHlaska);
         getchar();
         exit(EXIT_FAILURE);
@@ -611,21 +646,23 @@ void lap(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // 1. Štart
-    // 2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca" a "indexCasu"
-    // 3. Inicializujem premennú
-        // "najlepsiCas" -> na hodnotu 0
-        // "indexJazdca" -> na hodnotu 0
-        // "indexCasu" -> na hodnotu 0
-    // 4. Prejdem celé pole jazdcov pričom sledujem ich čas
-    // 5. Nie je premenná "najlepsiCas" inicializovaná alebo je čas menší než môj uložený?
-        // TRUE: 
-            // Tak nastavím premennú "najlepsiCas" na aktuálny čas...
-            // ...nastavím premennú "indexJazdca" na aktuálny index jazdca
-            // ...a nastavím premennú "indexCasu" na aktuálny index čas
-        // FALSE: Pokračujem ďalej
-    // 6. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
-    // 7. Stop
+    /*
+        1. Štart
+        2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca" a "indexCasu"
+        3. Inicializujem premennú
+            "najlepsiCas" -> na hodnotu 0
+            "indexJazdca" -> na hodnotu 0
+            "indexCasu" -> na hodnotu 0
+        4. Prejdem celé pole jazdcov pričom sledujem ich čas
+        5. Nie je premenná "najlepsiCas" inicializovaná alebo je čas menší než môj uložený?
+            TRUE: 
+                Tak nastavím premennú "najlepsiCas" na aktuálny čas...
+                ...nastavím premennú "indexJazdca" na aktuálny index jazdca
+                ...a nastavím premennú "indexCasu" na aktuálny index čas
+            FALSE: Pokračujem ďalej
+        6. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
+        7. Stop
+    */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
@@ -658,28 +695,29 @@ void gender(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // TODO Upravit?
-    // 1. Štart
-    // 2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca", "indexCasu" a "pohlavie"
-    // 3. Inicializujem premennú
-        // "najlepsiCas" -> na hodnotu 0
-        // "indexJazdca" -> na hodnotu 0
-        // "indexCasu" -> na hodnotu 0
-        // "pohlavie" -> zatiaľ na prázdnu hodnotu
-    // 4. Načítam pohlavie z klávesnice do premennej "pohlavie"
-    // 5. Zadal používateľ správnu hodnotu?
-        // TRUE: Pokračujem ďalej
-        // FALSE: Skončím program
-    // 6. Prejdem celé pole jazdcov pričom sledujem ich čas a pohlavie
-    /* 7. Nie je premenná "najlepsiCas" inicializovaná alebo je čas menší než môj uložený a zároveň...
-    ...je pohlavie jazdca rovné premennej "pohlavie"? */
-        // TRUE: 
-            // Tak nastavím premennú "najlepsiCas" na aktuálny čas...
-            // ...nastavím premennú "indexJazdca" na aktuálny index jazdca
-            // ...a nastavím premennú "indexCasu" na aktuálny index čas
-        // FALSE: Pokračujem ďalej
-    // 8. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
-    // 9. Stop
+    /*
+        1. Štart
+        2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca", "indexCasu" a "pohlavie"
+        3. Inicializujem premennú
+            "najlepsiCas" -> na hodnotu 0
+            "indexJazdca" -> na hodnotu 0
+            "indexCasu" -> na hodnotu 0
+            "pohlavie" -> zatiaľ na prázdnu hodnotu
+        4. Načítam pohlavie z klávesnice do premennej "pohlavie"
+        5. Zadal používateľ správnu hodnotu?
+            TRUE: Pokračujem ďalej
+            FALSE: Skončím program
+        6. Prejdem celé pole jazdcov pričom sledujem ich čas a pohlavie
+        7. Nie je premenná "najlepsiCas" inicializovaná alebo je čas menší než môj uložený a zároveň...
+        ...je pohlavie jazdca rovné premennej "pohlavie"?
+            TRUE: 
+                Tak nastavím premennú "najlepsiCas" na aktuálny čas...
+                ...nastavím premennú "indexJazdca" na aktuálny index jazdca
+                ...a nastavím premennú "indexCasu" na aktuálny index čas
+            FALSE: Pokračujem ďalej
+        8. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
+        9. Stop
+    */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
@@ -722,27 +760,40 @@ void brand(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // TODO upravit
-    // 1. Štart
-    // 2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca", "indexCasu" a ukazovateľ "znacka"
-    // 3. Inicializujem premennú
-        // "najlepsiCas" -> na hodnotu prvého času prvého jazdca
-        // "indexJazdca" -> na hodnotu 0
-        // "indexCasu" -> na hodnotu 0
-        // "znacka" -> zatiaľ na prázdnu hodnotu
-    // 6. Prejdem celé pole jazdcov pričom sledujem ich čas a značku
-    // 7. Je čas menší než môj uložený a zároveň je značka auta jazdca rovná ukazovatelu "znacka"?
-        // TRUE: 
-            // Tak nastavím premennú "najlepsiCas" na aktuálny čas...
-            // ...nastavím premennú "indexJazdca" na aktuálny index jazdca
-            // ...a nastavím premennú "indexCasu" na aktuálny index čas
-        // FALSE: Pokračujem ďalej
-    // 8. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
-    // 9. Stop
+    /*
+        1. Štart
+        2. Zadeklarujem si premenné "indexJazdca", "indexCasu", "vybaveneIndex", "najlepsiCas", "bVypis"...
+        ...a dvojitý ukazovateľ "vybaveneZnacky"
+        3. Inicializujem premennú
+            "indexJazdca" -> na hodnotu 0
+            "indexCasu" -> na hodnotu 0
+            "vybaveneIndex" -> na hodnotu 0
+            "najlepsiCas" -> na hodnotu 0
+            "bVypis" -> na hodnotu true (1)
+            "vybaveneZnacky" -> zatiaľ na prázdnu hodnotu
+        4. Alokujem dvojrozmerné dynamické pole
+        5. Cyklom prejdem celé pole jazdcov pričom sledujem ich značku
+        6. V cykle prejdem ďalším cyklom celé pole jazdcov pričom sledujem ich čas
+        7. Je čas menší než môj uložený a zároveň je značka rovná aktuálnej značke?
+            TRUE: 
+                Tak nastavím premennú "najlepsiCas" na aktuálny čas...
+                ...nastavím premennú "indexJazdca" na aktuálny index jazdca
+                ...a nastavím premennú "indexCasu" na aktuálny index čas
+            FALSE: Pokračujem ďalej
+        8. Prejdem celé pole "vybaveneZnacky"
+        9. Je značka v zozname vybavených značiek?
+            TRUE: Pokračujem ďalej
+            FALSE: Tak...
+                ...Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov...
+                ...uložím si jeho značku do poľa "vybaveneZnacky"...
+                ...pripočítam k premennej "vybaveneIndex" jednotku
+        10. Stop
+    */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
-    int indexJazdca = 0, indexCasu = 0;
+    int indexJazdca = 0, indexCasu = 0, vybaveneIndex = 0;
+    char** vybaveneZnacky = NULL;
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
@@ -751,28 +802,67 @@ void brand(jazdec* tabulka, size_t velkost){
         return;
     }
 
+
+    if(!(vybaveneZnacky = (char**)malloc(velkost * sizeof(char*)))){
+        char* chybovaHlaska = (char*)calloc(256, sizeof(char));
+        strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+        printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
+        free(chybovaHlaska);
+        getchar();
+        exit(EXIT_FAILURE);
+    }
+    for (size_t i = 0; i < velkost; i++){
+        if(!(vybaveneZnacky[i] = (char*)calloc(200, sizeof(char)))){
+            char* chybovaHlaska = (char*)calloc(256, sizeof(char));
+            strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+            printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno,chybovaHlaska);
+            free(chybovaHlaska);
+            getchar();
+            exit(EXIT_FAILURE);
+        }
+    }
+
 //*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
 
-    // TODO treba si sledovat predchadzajuce znacky aut na to aby sa mi viac krat neopakovali vypisi
-     // Toto by mohlo byt docielene dvoj rozmerným dynamickým polom ktoré pokaždé čo spravím výpis na značku si zapíšem...
-     // ...danú značku ako vybavenú a ďalej ju vypisovať nebude.
+    for (size_t x = 0; x < velkost; x++){ // Prejde pole jazdcov pričom sledujem ich značku
 
-    for (size_t x = 0; x < velkost; x++){
+        //*------------------------------------------------- Premenné -------------------------------------------------
+
         float najlepsiCas = 0.f;
+        int bVypis = 1;
+
+        //*--------------------------------------- Prejdenie každého času jazdca --------------------------------------
+
         for(size_t i = 0; i < velkost; i++){
             for(size_t j = 0; j < 5; j++) {
-                if((najlepsiCas == 0.f || tabulka[i].casy[j] < najlepsiCas) && strcmp(tabulka[i].znacka, tabulka[x].znacka) == 0){
+                if((najlepsiCas == 0.f || tabulka[i].casy[j] < najlepsiCas)
+                && strcmp(tabulka[i].znacka, tabulka[x].znacka) == 0){
                     najlepsiCas = tabulka[i].casy[j];
                     indexJazdca = i;
                     indexCasu = j;
                 }
             }
         }
-        printf("\nZnacka: %c%s\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", (tabulka[indexJazdca].znacka[0]-32)
-        ,tabulka[indexJazdca].znacka+1, tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno, tabulka[indexJazdca].priezvisko
-        , indexCasu+1);
-        if(x < velkost-1){
-            printf("\n");
+
+        //*--------------------------------- Kontrola či som údaje značky už nevypísal --------------------------------
+
+        for (size_t k = 0; k < velkost; k++){
+            if(strcmp(tabulka[indexJazdca].znacka, vybaveneZnacky[k]) == 0){
+                bVypis = 0;
+            }
+        }
+
+        //*-------------------------------------------- Vypís údajov značky -------------------------------------------
+
+        if(bVypis == 1){
+            printf("\nZnacka: %c%s\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", (tabulka[indexJazdca].znacka[0]-32)
+            ,tabulka[indexJazdca].znacka+1, tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno
+            , tabulka[indexJazdca].priezvisko, indexCasu+1);
+            strcpy_s(vybaveneZnacky[vybaveneIndex], strlen(tabulka[indexJazdca].znacka)+1, tabulka[indexJazdca].znacka);
+            vybaveneIndex++;
+            if(x < velkost-2){ // -2 preto lebo "velkost" je indexová hodnota a potrebujem o výpis pred posledným
+                printf("\n");
+            }
         }
     }  
 }
@@ -782,28 +872,29 @@ void year(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // TODO Upravit?
-    // 1. Štart
-    // 2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca", "indexCasu" a "rok"
-    // 3. Inicializujem premennú
-        // "najlepsiCas" -> na hodnotu 0
-        // "indexJazdca" -> na hodnotu 0
-        // "indexCasu" -> na hodnotu 0
-        // "rok" -> zatiaľ na prázdnu hodnotu
-    // 4. Načítam rok z klávesnice do premennej "rok"
-    // 5. Zadal používateľ správnu hodnotu?
-        // TRUE: Pokračujem ďalej
-        // FALSE: Skončím program
-    // 6. Prejdem celé pole jazdcov pričom sledujem ich čas a rok narodenia
-    /* 7. Nie je premenná "najlepsiCas" inicializovaná alebo je čas menší než môj uložený a zároveň...
-    ...je rok jazdca menší ako premenná "rok"? */
-        // TRUE: 
-            // Tak nastavím premennú "najlepsiCas" na aktuálny čas...
-            // ...nastavím premennú "indexJazdca" na aktuálny index jazdca
-            // ...a nastavím premennú "indexCasu" na aktuálny index čas
-        // FALSE: Pokračujem ďalej
-    // 8. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
-    // 9. Stop
+    /*  
+        1. Štart
+        2. Zadeklarujem si premenné "najlepsiCas", "indexJazdca", "indexCasu" a "rok"
+        3. Inicializujem premenné
+            "najlepsiCas" -> na hodnotu 0
+            "indexJazdca" -> na hodnotu 0
+            "indexCasu" -> na hodnotu 0
+            "rok" -> na hodnotu 0
+        4. Načítam rok z klávesnice do premennej "rok"
+        5. Zadal používateľ správnu hodnotu?
+            TRUE: Pokračujem ďalej
+            FALSE: Skončím program
+        6. Prejdem celé pole jazdcov pričom sledujem ich čas a rok narodenia
+        7. Nie je premenná "najlepsiCas" inicializovaná alebo je čas menší než môj uložený a zároveň...
+        ...je rok jazdca menší ako premenná "rok"?
+            TRUE: Tak...
+                ...nastavím premennú "najlepsiCas" na aktuálny čas...
+                ...nastavím premennú "indexJazdca" na aktuálny index jazdca
+                ...a nastavím premennú "indexCasu" na aktuálny index čas
+            FALSE: Pokračujem ďalej
+        8. Urobím formátovaný výpis jazdca s najlepším časom pomocou indexov
+        9. Stop 
+    */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
@@ -845,24 +936,31 @@ void year(jazdec* tabulka, size_t velkost){
     }
 }
 
+// Formátovaný výpis priemerných kôl jazdcov a najlepšieho priemerného kola z jazdcov
 void average(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // TODO dorobiť popis
-    // 1. Štart
-    // 2. Zadeklarujem si ukazovateľ "priezviskoJazdca" a premennú "bUspech"
-    // 3. Inicializujem premennú a ukazovateľ
-        // "priezviskoJazdca" -> zatiaľ na prázdnu hodnotu
-        // "bUspech" -> na hodnotu false (0)
-    // 4. Alokujem dynamické pole "priezviskoJazdca"
-    // 5. Načítam priezvisko z klávesnice do pola "priezviskoJazdca"
-    // 6. Prejdem celé pole jazdcov
-    // 7. Podla priezviska vyhľadam jazdca
-    // 8. Existuje jazdec?
-        // TRUE: Tak nastavím premennú "bUspech" na true (1) a urobím formátovaný výpis jazdca
-        // FALSE: Vypíšeme chybovú hlášku napr. "Jazdec nenajdeny"
-    // 9. Stop
+    /*
+        1. Štart
+        2. Zadeklarujem si premenne "najlepsiPriemer", "najlepsiPriemerIndex", "j", "priemernyCas"
+        3. Inicializujem premennú a ukazovateľ
+            "najlepsiPriemer" -> na hodnotu 0
+            "najlepsiPriemerIndex" -> na hodnotu 0
+            "j" -> na hodnotu 0
+            "priemernyCas" -> na hodnotu 0
+        4. Prejdem celé pole jazdcov
+        5. Cyklicky sčítam všetky časy jazdca
+        6. Vydelím ich počtom otáčok cyklu "j"
+        7. Nie je premenná "najlepsiPriemer" inicializovaná alebo je "priemernyCas" menší než "najlepsiPriemer"?
+            TRUE: Tak...
+                ...nastavím premennú "najlepsiPriemer" na hodnotu premennej "priemernyCas"...
+                ...a nastavím premennú "najlepsiPriemerIndex" na hodnotu indexu aktuálneho jazdca
+            FALSE: Pokračujem ďalej
+        8. Urobím formátovaný výpis všetkých priemerných časov jazdcov
+        9. Urobím formátovaný výpis najlepšieho priemerného času zo všetkých jazdcov
+        10. Stop
+    */
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
@@ -876,20 +974,15 @@ void average(jazdec* tabulka, size_t velkost){
     float najlepsiPriemer = 0.f;
     int najlepsiPriemerIndex = 0;
     for(size_t i = 0; i < velkost; i++){
+        
         //*----------------------------------------------- Premenné -----------------------------------------------
 
         size_t j = 0;
-        float najlepsiCas = tabulka[i].casy[0],  priemernyCas = 0.f, najhorsiCas = 0.f;
+        float priemernyCas = 0.f;
 
-        //*---------------------------------------------- Výpis časov ---------------------------------------------
+        //*----------------------------------- Zistenie a výpis priemerného času ----------------------------------
 
         for (j = 0; j < 5; j++){
-            if(tabulka[i].casy[j] < najlepsiCas){
-                najlepsiCas = tabulka[i].casy[j];
-            }
-            if(tabulka[i].casy[j] > najhorsiCas){
-                najhorsiCas = tabulka[i].casy[j];
-            }
             priemernyCas += tabulka[i].casy[j];
         }
 
