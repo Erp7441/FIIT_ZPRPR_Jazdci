@@ -679,7 +679,7 @@ void lap(jazdec* tabulka, size_t velkost){
 //*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
 
     for(size_t i = 0; i < velkost; i++){
-        for(size_t j = 0; j < 5; j++) {
+        for(size_t j = 0; j < 5; j++){
             if(najlepsiCas == 0.f || tabulka[i].casy[j] < najlepsiCas){
                 najlepsiCas = tabulka[i].casy[j];
                 indexJazdca = i;
@@ -744,7 +744,7 @@ void gender(jazdec* tabulka, size_t velkost){
 //*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
 
     for(size_t i = 0; i < velkost; i++){
-        for(size_t j = 0; j < 5; j++) {
+        for(size_t j = 0; j < 5; j++){
             if((najlepsiCas == 0.f || tabulka[i].casy[j] < najlepsiCas) && tabulka[i].pohlavie == pohlavie){
                 najlepsiCas = tabulka[i].casy[j];
                 indexJazdca = i;
@@ -834,7 +834,7 @@ void brand(jazdec* tabulka, size_t velkost){
         //*--------------------------------------- Prejdenie každého času jazdca --------------------------------------
 
         for(size_t i = 0; i < velkost; i++){
-            for(size_t j = 0; j < 5; j++) {
+            for(size_t j = 0; j < 5; j++){
                 if((najlepsiCas == 0.f || tabulka[i].casy[j] < najlepsiCas)
                 && strcmp(tabulka[i].znacka, tabulka[x].znacka) == 0){
                     najlepsiCas = tabulka[i].casy[j];
@@ -920,7 +920,7 @@ void year(jazdec* tabulka, size_t velkost){
 //*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
 
     for(size_t i = 0; i < velkost; i++){
-        for(size_t j = 0; j < 5; j++) {
+        for(size_t j = 0; j < 5; j++){
             if((najlepsiCas == 0.f || tabulka[i].casy[j] < najlepsiCas) && tabulka[i].rok < rok){
                 najlepsiCas = tabulka[i].casy[j];
                 indexJazdca = i;
@@ -994,4 +994,68 @@ void average(jazdec* tabulka, size_t velkost){
         printf("\n%s %s - %.3f", tabulka[i].meno, tabulka[i].priezvisko, priemernyCas);
     }
     printf("\n\nNajlepsie:\n%s %s - %.3f", tabulka[najlepsiPriemerIndex].meno, tabulka[najlepsiPriemerIndex].priezvisko, najlepsiPriemer);
+}
+
+// Formátovaný výpis počtu a časov kôl jazdcov ktoré odjazdili do určitého času
+void under(jazdec* tabulka, size_t velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    /*  
+        1. Štart
+        2. Zadeklarujem si premenné "pocetKol", "cas"
+        3. Inicializujem premenné
+            "pocetKol" -> na hodnotu 0
+            "cas" -> na hodnotu 0
+        4. Načítam čas z klávesnice do premennej "cas"
+        5. Prejdem celé pole jazdcov pričom sledujem ich čas
+        6. Je čas menší alebo rovný môju uloženému času
+            TRUE: Tak spravím formatovany výpis časov
+            FALSE: Pokračujem ďalej
+        7. Stop 
+    */
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    float cas = 0.f;
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    printf("\nZadajte cas: ");
+    scanf_s("%f", &cas, 5);
+    getchar();
+
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+
+//*--------------------------------------------------- Výpis časov ----------------------------------------------------
+
+    printf("\n");
+    for(size_t i = 0; i < velkost; i++){
+
+        //*------------------------------------------------- Premenné -------------------------------------------------
+
+        int pocetKol = 0;
+
+        //*------------------------------------------------ Výpis časov -----------------------------------------------
+
+        for(size_t j = 0; j < 5; j++){ // Zistí počet kôl jazdcov pod určitým časom
+            if(tabulka[i].casy[j] <= cas){
+                pocetKol++;
+            }
+        }
+        if(pocetKol != 0){ // Pokiaľ máme kolá pod určitým časom
+            printf("%s %s - %d kola", tabulka[i].meno, tabulka[i].priezvisko, pocetKol);
+            for(size_t j = 0; j < 5; j++){
+                if(tabulka[i].casy[j] <= cas){
+                    printf(", %zu (%.3f)", j+1, tabulka[i].casy[j]);
+                }
+            }
+            if(i < velkost-1){
+                printf("\n");
+            }
+        }
+    }
 }
