@@ -507,6 +507,69 @@ void uvolnenieJazdcov(jazdec** tabulka){
     }
 }
 
+// Alokácia dvojrozmerného poľa
+void alokovat2Dpole(char*** zoznam, size_t velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    /*
+        1. Štart
+        2. Zadeklarujem si ukazovateľ na dvojrozmerné pole "zoznam" a premennú "velkost"
+        3. Alokujem dynamické pole "zoznam"?
+        4. Cyklicky alokujem každé políčko dynamického poľa "zoznam"
+        5. Stop
+    */
+
+//*-------------------------------------------------- Alokácia pamäte -------------------------------------------------
+
+    if(!((*zoznam) = (char**)malloc(velkost * sizeof(char*)))){
+        char* chybovaHlaska = (char*)calloc(256, sizeof(char));
+        strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+        printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
+        free(chybovaHlaska);
+        getchar();
+        exit(EXIT_FAILURE);
+    }
+    for (size_t i = 0; i < velkost; i++){
+        if(!((*zoznam)[i] = (char*)calloc(200, sizeof(char)))){
+            char* chybovaHlaska = (char*)calloc(256, sizeof(char));
+            strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+            printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno,chybovaHlaska);
+            free(chybovaHlaska);
+            getchar();
+            exit(EXIT_FAILURE);
+        }
+    }
+}
+
+// Dealokácia dvojrozmerného poľa
+void dealokovat2Dpole(char*** zoznam, size_t velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    /*
+        1. Štart
+        2. Zadeklarujem si ukazovateľ na dvojrozmerné pole "zoznam" a premennú "velkost"
+        3. Existuje dvojrozmerné pole "zoznam"?
+            TRUE: Tak...
+                ...Cyklicky uvoľním každé políčko dynamického poľa "zoznam"...
+                ...Potom uvoľním samotné dynamické pole "zoznam"...
+                ...a nastavím hodnotu ukazovateľa "zoznam" na prázdnu hodnotu
+            FALSE: Skončím program
+        4. Stop
+    */
+
+//*------------------------------------------------- Uvoľnenie pamäte -------------------------------------------------
+
+    if(*zoznam && **zoznam){
+        for (size_t i = 0; i < velkost; i++){
+            free((*zoznam)[i]);
+        }
+        free(*zoznam);
+        *zoznam = NULL;
+    }
+}
+
 //*-------------------------------------------------- Hlavné funkcie --------------------------------------------------
 
 // Formátovaný výpis všetkých jazdcov
@@ -802,25 +865,7 @@ void brand(jazdec* tabulka, size_t velkost){
         return;
     }
 
-
-    if(!(vybaveneZnacky = (char**)malloc(velkost * sizeof(char*)))){
-        char* chybovaHlaska = (char*)calloc(256, sizeof(char));
-        strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
-        printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
-        free(chybovaHlaska);
-        getchar();
-        exit(EXIT_FAILURE);
-    }
-    for (size_t i = 0; i < velkost; i++){
-        if(!(vybaveneZnacky[i] = (char*)calloc(200, sizeof(char)))){
-            char* chybovaHlaska = (char*)calloc(256, sizeof(char));
-            strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
-            printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno,chybovaHlaska);
-            free(chybovaHlaska);
-            getchar();
-            exit(EXIT_FAILURE);
-        }
-    }
+    alokovat2Dpole(&vybaveneZnacky, velkost);
 
 //*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
 
@@ -864,7 +909,9 @@ void brand(jazdec* tabulka, size_t velkost){
                 printf("\n");
             }
         }
-    }  
+    }
+
+    dealokovat2Dpole(&vybaveneZnacky, velkost);
 }
 
 // Formátovaný výpis najlepšieho kola z jazdcov narodených pred určitým rokom
