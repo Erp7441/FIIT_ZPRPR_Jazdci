@@ -19,6 +19,8 @@
 #include <string.h>
 #include <errno.h> // Umožňuje lepšie ošetrenie chýb v programe
 
+// TODO definovat konstanty
+
 //*----------------------------------------------------- Štruktúry ----------------------------------------------------
 
 typedef struct jazdec{
@@ -482,7 +484,9 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
         }
     }
 
-    fclose(subor);
+    if(fclose(subor) == EOF){
+        printf("\nChyba pri zatvarani suboru");
+    }
 }
 
 // Uvoľnenie poľa jazdcov
@@ -1105,4 +1109,21 @@ void under(jazdec* tabulka, size_t velkost){
             }
         }
     }
+}
+
+void change(){
+    // Buď budeš fseekovať a priamo meniť v súbore
+    // Alebo môžeš zmeniť údaje v poli a potom ho celé printnúť do súboru
+    // Tretia možnosť je printnúť iba zmenený údaj na dánú pozíciu v súbore (ale to bude asi hard)
+}
+
+void newdriver(){
+    // Buď budeš fseekovať a priamo meniť v súbore
+    // Alebo môžeš zmeniť údaje v poli a potom ho celé printnúť do súboru
+    // Tretia možnosť je printnúť iba zmenený údaj na dánú pozíciu v súbore (ale to bude asi hard)
+}
+void rmdriver(){
+    // Buď budeš fseekovať a priamo meniť v súbore
+    // Alebo môžeš zmeniť údaje v poli a potom ho celé printnúť do súboru
+    // Tretia možnosť je printnúť iba zmenený údaj na dánú pozíciu v súbore (ale to bude asi hard)
 }
