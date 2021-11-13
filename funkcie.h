@@ -602,11 +602,14 @@ void vpisatDoSuboru(jazdec* tabulka, size_t velkost){
         for (size_t j = 0; j < 5; j++){
             fprintf(subor, ";%.3f", tabulka[i].casy[j]);
         }
+        if(i != velkost-1){
+            fprintf(subor,"\n");
+        }
     }
 
-    
-
-    
+    if(fclose(subor) == EOF){
+        printf("\nChyba pri zatvarani suboru");
+    }
 }
 
 //*-------------------------------------------------- Hlavné funkcie --------------------------------------------------
@@ -1148,6 +1151,7 @@ void under(jazdec* tabulka, size_t velkost){
     }
 }
 
+// Zmení čas v poli a súbore
 void change(jazdec** tabulka, size_t velkost){
     
 //*------------------------------------------------------ Postup ------------------------------------------------------
@@ -1191,7 +1195,6 @@ void change(jazdec** tabulka, size_t velkost){
 
 //*-------------------------------------------------- Hladanie jazdca -------------------------------------------------
 
-    printf("\n");
     for(size_t i = 0; i < velkost; i++){
         if(strcmp((*tabulka)[i].priezvisko, priezviskoJazdca) == 0){ // TODO Pri parciálnom priezvisku dať návrh čo mohol používateľ myslieť?
             bUspech = 1;
@@ -1200,7 +1203,7 @@ void change(jazdec** tabulka, size_t velkost){
     }
 
     if(bUspech != 1){
-        printf("Jazdec nenajdeny");
+        printf("\nJazdec nenajdeny");
     }
     else{
         vpisatDoSuboru((*tabulka), velkost);
