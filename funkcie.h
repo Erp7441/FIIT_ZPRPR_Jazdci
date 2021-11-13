@@ -577,6 +577,38 @@ void dealokovat2Dpole(char*** zoznam, size_t velkost){
     }
 }
 
+// Vpíše tabuľku z programu do súboru
+void vpisatDoSuboru(jazdec* tabulka, size_t velkost){
+
+    FILE* subor;
+
+    if((fopen_s(&subor, "jazdci.csv", "w")) != 0){
+        char* chybovaHlaska = (char*)calloc(256, sizeof(char));
+        strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+        printf("\nSubor nie je mozne precitat");
+        printf("\nNemozno otvorit subor jazdci.csv\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
+        free(chybovaHlaska);
+        getchar();
+        exit(EXIT_FAILURE);
+    }
+
+    for(size_t i = 0; i < velkost; i++){
+        fprintf(subor, "%s %s;%c;%d;%s"
+        , tabulka[i].meno
+        , tabulka[i].priezvisko
+        , tabulka[i].pohlavie
+        , tabulka[i].rok
+        , tabulka[i].znacka);
+        for (size_t j = 0; j < 5; j++){
+            fprintf(subor, ";%.3f", tabulka[i].casy[j]);
+        }
+    }
+
+    
+
+    
+}
+
 //*-------------------------------------------------- Hlavné funkcie --------------------------------------------------
 
 // Formátovaný výpis všetkých jazdcov
@@ -610,7 +642,9 @@ void sum(jazdec* tabulka, size_t velkost){
         for (j = 0; j < 5; j++){
             printf("%.3f", tabulka[i].casy[j]);
             if(j == 4){
-                printf("\n");
+                if(i != velkost-1){
+                    printf("\n");
+                }
             }
             else{
                 printf(";");
@@ -1167,6 +1201,9 @@ void change(jazdec** tabulka, size_t velkost){
 
     if(bUspech != 1){
         printf("Jazdec nenajdeny");
+    }
+    else{
+        vpisatDoSuboru((*tabulka), velkost);
     }
 
     free(priezviskoJazdca);
