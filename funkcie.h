@@ -23,6 +23,7 @@
 
 //*----------------------------------------------------- Štruktúry ----------------------------------------------------
 
+// Dátová štruktúra Jazdec
 typedef struct jazdec{
     char* meno;
     char* priezvisko;
@@ -108,7 +109,8 @@ void podpis(char const* zadanie, char const* meno, char const* aisID){
         printf("|\n");
     }
 
-    // AIS ID
+//*------------------------------------------------------ AIS ID ------------------------------------------------------
+
     if(aisID && dlzkaAisID > 0){
         printf("|");
         for (size_t i = 0; i < (velkostOhranicenia - dlzkaAisID - 1)/2; i++){
@@ -122,7 +124,8 @@ void podpis(char const* zadanie, char const* meno, char const* aisID){
         printf("|\n");
     }
 
-    // Spodný rám
+//*---------------------------------------------------- Spodný rám ---------------------------------------------------
+
     for (size_t i = 0; i < velkostOhranicenia; i++){
         printf("-");
     }
@@ -606,7 +609,7 @@ void sum(jazdec* tabulka, size_t velkost){
         size_t j = 0;
         for (j = 0; j < 5; j++){
             printf("%.3f", tabulka[i].casy[j]);
-            if(j == 4 && i != velkost-1){
+            if(j == 4){
                 printf("\n");
             }
             else{
@@ -1111,10 +1114,62 @@ void under(jazdec* tabulka, size_t velkost){
     }
 }
 
-void change(){
+void change(jazdec** tabulka, size_t velkost){
+    
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
     // Buď budeš fseekovať a priamo meniť v súbore
     // Alebo môžeš zmeniť údaje v poli a potom ho celé printnúť do súboru
     // Tretia možnosť je printnúť iba zmenený údaj na dánú pozíciu v súbore (ale to bude asi hard)
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    char* priezviskoJazdca = NULL;
+    int poradoveCislo = 0;
+    float novyCas = 0;	
+    int bUspech = 0;
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    if(!(*tabulka)){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+    if(!(priezviskoJazdca = (char *)calloc(100, sizeof(char)))){
+        char* chybovaHlaska = (char*)calloc(256, sizeof(char));
+        strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+        printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
+        free(chybovaHlaska);
+        getchar();
+        exit(EXIT_FAILURE);
+    }
+    printf("\nZadajte priezvisko jazdca: ");
+    scanf_s("%s", priezviskoJazdca, 100);
+    getchar();
+    
+    printf("Zadajte poradove cislo kola: ");
+    scanf_s("%d", &poradoveCislo, 1);
+    getchar();
+
+    printf("Zadajte novy cas: ");
+    scanf_s("%f", &novyCas, 1);
+    getchar();
+
+//*-------------------------------------------------- Hladanie jazdca -------------------------------------------------
+
+    printf("\n");
+    for(size_t i = 0; i < velkost; i++){
+        if(strcmp((*tabulka)[i].priezvisko, priezviskoJazdca) == 0){ // TODO Pri parciálnom priezvisku dať návrh čo mohol používateľ myslieť?
+            bUspech = 1;
+            (*tabulka)[i].casy[poradoveCislo-1] = novyCas;
+        }
+    }
+
+    if(bUspech != 1){
+        printf("Jazdec nenajdeny");
+    }
+
+    free(priezviskoJazdca);
 }
 
 void newdriver(){

@@ -69,6 +69,9 @@ int main(){
             case 'u':
                 under(tabulka, velkost);
                 break;
+            case 'c':
+                change(&tabulka, velkost);
+                break;
             case 'q':
                 uvolnenieJazdcov(&tabulka);
                 nacitatJazdcov(&tabulka, &velkost);
