@@ -209,8 +209,6 @@ bool bJeCislo(string retazec, bool bFloat){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // TODO Vylepšiť tak aby vedelo vyhodnotiť narp. 10,000 ako 10000
-
     /*
         1. Štart
         2. Zadeklarujem si ukazovateľ "retazec" a premenné "bFloat", "bodka"
@@ -642,10 +640,18 @@ void sum(jazdec* tabulka, size_t velkost){
     printf("\n");
     for(size_t i = 0; i < velkost; i++){
         // Vo výpise automobilu kapitalizujem prvé písmenko značky
-        // TODO Lepší výpis značiek ktoré sa skladajú z viacerých slov. Napr. "Alfa Romeo"
-        printf("%s %s, nar. %d, %s, Automobil: %c%s\nCasy okruhov: ", tabulka[i].meno
-        , tabulka[i].priezvisko, tabulka[i].rok, tabulka[i].pohlavie == 'm' ? "muz" : "zena"
-        , (tabulka[i].znacka[0]-32),tabulka[i].znacka+1);
+        printf("%s %s, nar. %d, %s, Automobil: ", tabulka[i].meno
+        , tabulka[i].priezvisko, tabulka[i].rok, tabulka[i].pohlavie == 'm' ? "muz" : "zena");
+
+        for (size_t j = 0; j < strlen(tabulka[i].znacka); j++){
+            if(j == 0 || tabulka[i].znacka[j-1] == ' '){
+                printf("%c", tabulka[i].znacka[j]-32);
+            }
+            else{
+                printf("%c", tabulka[i].znacka[j]);
+            }
+        }
+        printf("\nCasy okruhov: ");
 
         //*------------------------------------------------ Výpis časov -----------------------------------------------
         
@@ -714,8 +720,18 @@ void driver(jazdec* tabulka, size_t velkost){
     for(size_t i = 0; i < velkost; i++){
         if(strcmp(tabulka[i].priezvisko, priezviskoJazdca) == 0){ // TODO Pri parciálnom priezvisku dať návrh čo mohol používateľ myslieť?
             bUspech = true;
-            printf("%s %s\nnar. %d, %s\nAutomobil: %c%s\n\nCasy okruhov: ", tabulka[i].meno, tabulka[i].priezvisko
-            , tabulka[i].rok, tabulka[i].pohlavie == 'm' ? "muz" : "zena", (tabulka[i].znacka[0]-32),tabulka[i].znacka+1);
+            printf("%s %s\nnar. %d, %s\nAutomobil: ", tabulka[i].meno, tabulka[i].priezvisko
+            , tabulka[i].rok, tabulka[i].pohlavie == 'm' ? "muz" : "zena");
+
+            for (size_t j = 0; j < strlen(tabulka[i].znacka); j++){
+                if(j == 0 || tabulka[i].znacka[j-1] == ' '){
+                    printf("%c", tabulka[i].znacka[j]-32);
+                }
+                else{
+                    printf("%c", tabulka[i].znacka[j]);
+                }
+            }
+            printf("\n\nCasy okruhov: ");
 
             //*----------------------------------------------- Premenné -----------------------------------------------
 
@@ -952,9 +968,18 @@ void brand(jazdec* tabulka, size_t velkost){
         //*-------------------------------------------- Vypís údajov značky -------------------------------------------
 
         if(bVypis == true){
-            // TODO Lepší výpis značiek ktoré sa skladajú z viacerých slov. Napr. "Alfa Romeo"
-            printf("\nZnacka: %c%s\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", (tabulka[indexJazdca].znacka[0]-32)
-            ,tabulka[indexJazdca].znacka+1, tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno
+            printf("\n");
+            for (size_t j = 0; j < strlen(tabulka[indexJazdca].znacka); j++){
+                if(j == 0 || tabulka[indexJazdca].znacka[j-1] == ' '){
+                    printf("%c", tabulka[indexJazdca].znacka[j]-32);
+                }
+                else{
+                    printf("%c", tabulka[indexJazdca].znacka[j]);
+                }
+            }
+
+            printf("\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d"
+            , tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno
             , tabulka[indexJazdca].priezvisko, indexCasu+1);
             strcpy_s(vybaveneZnacky[vybaveneIndex], strlen(tabulka[indexJazdca].znacka)+1, tabulka[indexJazdca].znacka);
             vybaveneIndex++;
