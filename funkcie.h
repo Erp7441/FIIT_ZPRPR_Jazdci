@@ -585,6 +585,8 @@ void dealokovat2Dpole(string** zoznam, size_t velkost){
 // Vpíše tabuľku z programu do súboru
 void vpisatDoSuboru(jazdec* tabulka, size_t velkost){
 
+    // TODO Dorobiť popis a sekcie
+
     FILE* subor;
 
     if((fopen_s(&subor, "jazdci.csv", "w")) != false){
@@ -615,6 +617,23 @@ void vpisatDoSuboru(jazdec* tabulka, size_t velkost){
     if(fclose(subor) == EOF){
         printf("\nChyba pri zatvarani suboru");
     }
+}
+
+// Zistí podobnosť dvoch reťazcov
+int podobnostRetazcov(string retazec1, string retazec2){
+
+    // TODO Dorobiť popis a sekcie
+    // TODO Fixnúť bug s "Cer" navrhuje ako "Baudelaire" miesto "Cermak". Problem sú dve 'e' v "Baudelaire"
+
+    int pocetZnakov = 0;
+    for(size_t i = 0; i < strlen(retazec1); i++){
+        for(size_t j = 0; j < strlen(retazec2); j++){
+            if(retazec1[i] == retazec2[j]){
+                pocetZnakov++;
+            }
+        }
+    }
+    return pocetZnakov;
 }
 
 //*-------------------------------------------------- Hlavné funkcie --------------------------------------------------
@@ -675,6 +694,7 @@ void driver(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
+    // TODO Dorobiť do popisu "podobnosť"
     /*
         1. Štart
         2. Zadeklarujem si ukazovateľ "priezviskoJazdca" a premennú "bUspech"
@@ -694,6 +714,8 @@ void driver(jazdec* tabulka, size_t velkost){
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
     string priezviskoJazdca = NULL;
+    string parcialnePriezvisko = NULL;
+    int podobnost = -1;
     bool bUspech = false;
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
@@ -702,7 +724,10 @@ void driver(jazdec* tabulka, size_t velkost){
         printf("\nData zo suboru neboli nacitane");
         return;
     }
-    if(!(priezviskoJazdca = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))){
+    if(
+        !(priezviskoJazdca = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))
+        || !(parcialnePriezvisko = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))
+    ){
         string chybovaHlaska = (string)calloc(VELKOST_CHYBOVEHO_BUFFERA, sizeof(char));
         strerror_s(chybovaHlaska, VELKOST_CHYBOVEHO_BUFFERA, (int)errno); // Konvertujem error kód na hlášku
         printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
@@ -718,7 +743,13 @@ void driver(jazdec* tabulka, size_t velkost){
 
     printf("\n");
     for(size_t i = 0; i < velkost; i++){
-        if(strcmp(tabulka[i].priezvisko, priezviskoJazdca) == 0){ // TODO Pri parciálnom priezvisku dať návrh čo mohol používateľ myslieť?
+        if(bUspech == false && podobnostRetazcov(tabulka[i].priezvisko, priezviskoJazdca) >= 3){
+            if(podobnost == -1 || podobnost < podobnostRetazcov(tabulka[i].priezvisko, priezviskoJazdca)){
+                podobnost = podobnostRetazcov(tabulka[i].priezvisko, priezviskoJazdca);
+                strcpy_s(parcialnePriezvisko, VELKOST_BUFFERA, tabulka[i].priezvisko);
+            }
+        }
+        if(strcmp(tabulka[i].priezvisko, priezviskoJazdca) == 0){
             bUspech = true;
             printf("%s %s\nnar. %d, %s\nAutomobil: ", tabulka[i].meno, tabulka[i].priezvisko
             , tabulka[i].rok, tabulka[i].pohlavie == 'm' ? "muz" : "zena");
@@ -765,11 +796,15 @@ void driver(jazdec* tabulka, size_t velkost){
         }
     }
 
-    if(bUspech != 1){
+    if(bUspech != true){
         printf("Jazdec nenajdeny");
+        if(strlen(parcialnePriezvisko) > 0){
+            printf("\nNemysleli ste \"%s\"?", parcialnePriezvisko);
+        }
     }
 
     free(priezviskoJazdca);
+    free(parcialnePriezvisko);
 }
 
 // Formátovaný výpis najlepšieho kola jazdcov
@@ -1198,6 +1233,7 @@ void change(jazdec** tabulka, size_t velkost){
 
     // TODO Vytvoriť postup
     // TODO Overiť hodnoty z klávesnice
+    // TODO Dorobiť do popisu "podobnosť"
     // Buď budeš fseekovať a priamo meniť v súbore
     // Alebo môžeš zmeniť údaje v poli a potom ho celé printnúť do súboru
     // Tretia možnosť je printnúť iba zmenený údaj na dánú pozíciu v súbore (ale to bude asi hard)
@@ -1205,6 +1241,8 @@ void change(jazdec** tabulka, size_t velkost){
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
     string priezviskoJazdca = NULL;
+    string parcialnePriezvisko = NULL;
+    int podobnost = -1;
     int poradoveCislo = 0;
     float novyCas = 0;	
     bool bUspech = false;
@@ -1215,7 +1253,10 @@ void change(jazdec** tabulka, size_t velkost){
         printf("\nData zo suboru neboli nacitane");
         return;
     }
-    if(!(priezviskoJazdca = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))){
+    if(
+        !(priezviskoJazdca = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))
+        || !(parcialnePriezvisko = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))
+    ){
         string chybovaHlaska = (string)calloc(VELKOST_CHYBOVEHO_BUFFERA, sizeof(char));
         strerror_s(chybovaHlaska, VELKOST_CHYBOVEHO_BUFFERA, (int)errno); // Konvertujem error kód na hlášku
         printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
@@ -1223,13 +1264,45 @@ void change(jazdec** tabulka, size_t velkost){
         getchar();
         exit(EXIT_FAILURE);
     }
+
     printf("\nZadajte priezvisko jazdca: ");
     scanf_s(" %s", priezviskoJazdca, VELKOST_BUFFERA);
     getchar();
 
-    printf("Zadajte poradove cislo kola: ");
-    scanf_s("%d", &poradoveCislo, 1);
-    getchar();
+    for(size_t i = 0; i < velkost; i++){
+        if(bUspech == false && podobnostRetazcov((*tabulka)[i].priezvisko, priezviskoJazdca) >= 3){
+            if(podobnost == -1 || podobnost < podobnostRetazcov((*tabulka)[i].priezvisko, priezviskoJazdca)){
+                podobnost = podobnostRetazcov((*tabulka)[i].priezvisko, priezviskoJazdca);
+                strcpy_s(parcialnePriezvisko, VELKOST_BUFFERA, (*tabulka)[i].priezvisko);
+            }
+        }
+        if(strcmp((*tabulka)[i].priezvisko, priezviskoJazdca) == 0){
+            bUspech = true;
+        }
+    }
+
+    if(bUspech != true){
+        printf("\nJazdec nenajdeny");
+        if(strlen(parcialnePriezvisko) > 0){
+            printf("\nNemysleli ste \"%s\"?", parcialnePriezvisko);
+        }
+        free(priezviskoJazdca);
+        free(parcialnePriezvisko);
+        return;
+    }
+
+    do
+    {
+        printf("Zadajte poradove cislo kola: ");
+        scanf_s("%d", &poradoveCislo, 1);
+        getchar();
+
+        if(poradoveCislo < 1 || poradoveCislo > 5){
+            printf("\nZadali ste nespravne poradove cislo kola (1-5)\n");
+        }
+    } while (poradoveCislo < 1 || poradoveCislo > 5);
+    
+    
 
     printf("Zadajte novy cas: ");
     scanf_s("%f", &novyCas, 1);
@@ -1238,20 +1311,15 @@ void change(jazdec** tabulka, size_t velkost){
 //*-------------------------------------------------- Hladanie jazdca -------------------------------------------------
 
     for(size_t i = 0; i < velkost; i++){
-        if(strcmp((*tabulka)[i].priezvisko, priezviskoJazdca) == 0){ // TODO Pri parciálnom priezvisku dať návrh čo mohol používateľ myslieť?
-            bUspech = true;
+        if(strcmp((*tabulka)[i].priezvisko, priezviskoJazdca) == 0){
             (*tabulka)[i].casy[poradoveCislo-1] = novyCas;
         }
     }
 
-    if(bUspech != 1){
-        printf("\nJazdec nenajdeny");
-    }
-    else{
-        vpisatDoSuboru((*tabulka), velkost);
-    }
+    vpisatDoSuboru((*tabulka), velkost);
 
     free(priezviskoJazdca);
+    free(parcialnePriezvisko);
 }
 
 // Vytvorí nového jazdca v poli a súbore
@@ -1329,6 +1397,7 @@ void rmdriver(jazdec** tabulka, size_t *velkost){
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
     // TODO Vytvoriť postup
+    // TODO Dorobiť do popisu "podobnosť"
 
     /*
         1. Štart
@@ -1352,6 +1421,8 @@ void rmdriver(jazdec** tabulka, size_t *velkost){
 
     string priezviskoJazdca = NULL;
     string menoJazdca = NULL;
+    string parcialnePriezvisko = NULL;
+    int podobnost = -1;
     bool bUspech = false;
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
@@ -1363,6 +1434,7 @@ void rmdriver(jazdec** tabulka, size_t *velkost){
     if(
         !(priezviskoJazdca = (string) calloc(VELKOST_BUFFERA, sizeof(char)))
         || !(menoJazdca = (string) calloc(VELKOST_BUFFERA, sizeof(char)))
+        || !(parcialnePriezvisko = (string) calloc(VELKOST_BUFFERA, sizeof(char)))
     ){
         string chybovaHlaska = (string)calloc(VELKOST_CHYBOVEHO_BUFFERA, sizeof(char));
         strerror_s(chybovaHlaska, VELKOST_CHYBOVEHO_BUFFERA, (int)errno); // Konvertujem error kód na hlášku
@@ -1380,7 +1452,13 @@ void rmdriver(jazdec** tabulka, size_t *velkost){
 
     printf("\n");
     for(size_t i = 0; i < *velkost; i++){
-        if(strcmp((*tabulka)[i].priezvisko, priezviskoJazdca) == 0 && bUspech == false){ // TODO Pri parciálnom priezvisku dať návrh čo mohol používateľ myslieť?
+        if(bUspech == false && podobnostRetazcov((*tabulka)[i].priezvisko, priezviskoJazdca) >= 3){
+            if(podobnost == -1 || podobnost < podobnostRetazcov((*tabulka)[i].priezvisko, priezviskoJazdca)){
+                podobnost = podobnostRetazcov((*tabulka)[i].priezvisko, priezviskoJazdca);
+                strcpy_s(parcialnePriezvisko, VELKOST_BUFFERA, (*tabulka)[i].priezvisko);
+            }
+        }
+        if(strcmp((*tabulka)[i].priezvisko, priezviskoJazdca) == 0 && bUspech == false){
             bUspech = true;
             strcpy_s(menoJazdca, VELKOST_BUFFERA, (*tabulka)[i].meno);
         }
@@ -1389,8 +1467,11 @@ void rmdriver(jazdec** tabulka, size_t *velkost){
         }
     }
 
-    if(bUspech != 1){
+    if(bUspech != true){
         printf("Jazdec nenajdeny");
+        if(strlen(parcialnePriezvisko) > 0){
+            printf("\nNemysleli ste \"%s\"?", parcialnePriezvisko);
+        }
     }
     else{        
         (*velkost)--;
@@ -1408,4 +1489,5 @@ void rmdriver(jazdec** tabulka, size_t *velkost){
     vpisatDoSuboru((*tabulka), (*velkost));
     free(priezviskoJazdca);
     free(menoJazdca);
+    free(parcialnePriezvisko);
 }
