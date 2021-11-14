@@ -635,6 +635,7 @@ void sum(jazdec* tabulka, size_t velkost){
     printf("\n");
     for(size_t i = 0; i < velkost; i++){
         // Vo výpise automobilu kapitalizujem prvé písmenko značky
+        // TODO lepší výpis značiek ktoré sa skladajú z viacerých slov. Napr. "Alfa Romeo"
         printf("%s %s, nar. %d, %s, Automobil: %c%s\nCasy okruhov: ", tabulka[i].meno
         , tabulka[i].priezvisko, tabulka[i].rok, tabulka[i].pohlavie == 'm' ? "muz" : "zena"
         , (tabulka[i].znacka[0]-32),tabulka[i].znacka+1);
@@ -697,7 +698,7 @@ void driver(jazdec* tabulka, size_t velkost){
         exit(EXIT_FAILURE);
     }
     printf("\nZadajte priezvisko jazdca: ");
-    scanf_s("%s", priezviskoJazdca, 100);
+    scanf_s(" %s", priezviskoJazdca, 100);
     getchar();
 
 //*-------------------------------------------------- Hladanie jazdca -------------------------------------------------
@@ -944,6 +945,7 @@ void brand(jazdec* tabulka, size_t velkost){
         //*-------------------------------------------- Vypís údajov značky -------------------------------------------
 
         if(bVypis == 1){
+            // TODO lepší výpis značiek ktoré sa skladajú z viacerých slov. Napr. "Alfa Romeo"
             printf("\nZnacka: %c%s\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", (tabulka[indexJazdca].znacka[0]-32)
             ,tabulka[indexJazdca].znacka+1, tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno
             , tabulka[indexJazdca].priezvisko, indexCasu+1);
@@ -1138,7 +1140,13 @@ void under(jazdec* tabulka, size_t velkost){
             }
         }
         if(pocetKol != 0){ // Pokiaľ máme kolá pod určitým časom
-            printf("%s %s - %d kola", tabulka[i].meno, tabulka[i].priezvisko, pocetKol);
+            printf("%s %s - %d ", tabulka[i].meno, tabulka[i].priezvisko, pocetKol);
+            if(pocetKol == 1){
+                printf("kolo");
+            }
+            else{
+                printf("kola");
+            }
             for(size_t j = 0; j < 5; j++){
                 if(tabulka[i].casy[j] <= cas){
                     printf(", %zu (%.3f)", j+1, tabulka[i].casy[j]);
@@ -1153,9 +1161,10 @@ void under(jazdec* tabulka, size_t velkost){
 
 // Zmení čas v poli a súbore
 void change(jazdec** tabulka, size_t velkost){
-    
+
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
+    // TODO vytvorit postup
     // Buď budeš fseekovať a priamo meniť v súbore
     // Alebo môžeš zmeniť údaje v poli a potom ho celé printnúť do súboru
     // Tretia možnosť je printnúť iba zmenený údaj na dánú pozíciu v súbore (ale to bude asi hard)
@@ -1182,9 +1191,9 @@ void change(jazdec** tabulka, size_t velkost){
         exit(EXIT_FAILURE);
     }
     printf("\nZadajte priezvisko jazdca: ");
-    scanf_s("%s", priezviskoJazdca, 100);
+    scanf_s(" %s", priezviskoJazdca, 100);
     getchar();
-    
+
     printf("Zadajte poradove cislo kola: ");
     scanf_s("%d", &poradoveCislo, 1);
     getchar();
@@ -1212,13 +1221,155 @@ void change(jazdec** tabulka, size_t velkost){
     free(priezviskoJazdca);
 }
 
-void newdriver(){
+// Vytvorí nového jazdca
+void newdriver(jazdec** tabulka, size_t *velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // TODO vytvorit postup
     // Buď budeš fseekovať a priamo meniť v súbore
     // Alebo môžeš zmeniť údaje v poli a potom ho celé printnúť do súboru
     // Tretia možnosť je printnúť iba zmenený údaj na dánú pozíciu v súbore (ale to bude asi hard)
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    if(!(*tabulka)){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+
+    (*velkost)++;
+    if(
+        !((*tabulka) = (jazdec*)realloc((*tabulka),(*velkost) * sizeof(jazdec))) 
+        || !((*tabulka)[(*velkost)-1].meno = (char*) calloc(100, sizeof(char)))
+        || !((*tabulka)[(*velkost)-1].priezvisko = (char*) calloc(100, sizeof(char)))
+        || !((*tabulka)[(*velkost)-1].znacka = (char*) calloc(100, sizeof(char)))
+    ){
+        char* chybovaHlaska = (char*)calloc(256, sizeof(char));
+        strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+        printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
+        free(chybovaHlaska);
+        getchar();
+        exit(EXIT_FAILURE);
+    }
+
+    printf("\nZadajte meno jazdca: ");
+    scanf_s(" %s", (*tabulka)[(*velkost)-1].meno, 100);
+    getchar();
+
+    printf("Zadajte priezvisko jazdca: ");
+    scanf_s(" %s", (*tabulka)[(*velkost)-1].priezvisko, 100);
+    getchar();
+
+    printf("Zadajte pohlavie jazdca: ");
+    scanf_s("%c", &(*tabulka)[(*velkost)-1].pohlavie, 1);
+    getchar();
+
+    printf("Zadajte rok narodenia jazdca: ");
+    scanf_s("%d", &(*tabulka)[(*velkost)-1].rok, 1);
+    getchar();
+
+    printf("Zadajte znacku auta jazdca: ");
+    fgets((*tabulka)[(*velkost)-1].znacka, 100, stdin);
+    (*tabulka)[(*velkost)-1].znacka[strcspn((*tabulka)[(*velkost)-1].znacka, "\n")] = 0;
+
+    for (size_t i = 0; i < strlen((*tabulka)[(*velkost)-1].znacka); i++){
+        if(((*tabulka)[(*velkost)-1].znacka[i]) >= 65 && ((*tabulka)[(*velkost)-1].znacka[i]) <= 90) {
+            (*tabulka)[(*velkost)-1].znacka[i] += 32;
+        }
+    }
+
+    for (size_t i = 0; i < 5; i++){
+        printf("Zadajte %zu. cas jazdca: ", i + 1);
+        scanf_s("%f", &(*tabulka)[(*velkost)-1].casy[i], 1);
+        getchar();
+    }
+
+    vpisatDoSuboru((*tabulka), *velkost);
+    sum((*tabulka), *velkost);
 }
-void rmdriver(){
-    // Buď budeš fseekovať a priamo meniť v súbore
-    // Alebo môžeš zmeniť údaje v poli a potom ho celé printnúť do súboru
-    // Tretia možnosť je printnúť iba zmenený údaj na dánú pozíciu v súbore (ale to bude asi hard)
+
+void rmdriver(jazdec** tabulka, size_t *velkost){
+
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    // TODO vytvorit postup
+    /*
+        1. Štart
+        2. Zadeklarujem si ukazovateľ "priezviskoJazdca" a premennú "bUspech"
+        3. Inicializujem premennú a ukazovateľ
+            "priezviskoJazdca" -> zatiaľ na prázdnu hodnotu
+            "menoJazdca" -> zatiaľ na prázdnu hodnotu
+            "bUspech" -> na hodnotu false (0)
+        4. Alokujem dynamické pole "priezviskoJazdca"
+        4. Alokujem dynamické pole "menoJazdca"
+        5. Načítam priezvisko z klávesnice do poľa "priezviskoJazdca"
+        6. Prejdem celé pole jazdcov
+        7. Podla priezviska vyhľadám jazdca
+        8. Existuje jazdec?
+            TRUE: Tak nastavím premennú "bUspech" na true (1) a urobím formátovaný výpis jazdca
+            FALSE: Vypíšeme chybovú hlášku napr. "Jazdec nenajdeny"
+        9. Stop
+    */
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    char* priezviskoJazdca = NULL;
+    char* menoJazdca = NULL;
+    int bUspech = 0;
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+    if(
+        !(priezviskoJazdca = (char*) calloc(100, sizeof(char)))
+        || !(menoJazdca = (char*) calloc(100, sizeof(char)))
+    ){
+        char* chybovaHlaska = (char*)calloc(256, sizeof(char));
+        strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+        printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
+        free(chybovaHlaska);
+        getchar();
+        exit(EXIT_FAILURE);
+    }
+    
+    printf("\nZadajte priezvisko jazdca: ");
+    scanf_s(" %s", priezviskoJazdca, 100);
+    getchar();
+
+//*-------------------------------------------------- Hladanie jazdca -------------------------------------------------
+
+    printf("\n");
+    for(size_t i = 0; i < *velkost; i++){
+        if(strcmp((*tabulka)[i].priezvisko, priezviskoJazdca) == 0 && bUspech == 0){ // TODO Pri parciálnom priezvisku dať návrh čo mohol používateľ myslieť?
+            bUspech = 1;
+            strcpy_s(menoJazdca, 100, (*tabulka)[i].meno);
+        }
+        if(bUspech == 1 && i < (*velkost)-1){
+            (*tabulka)[i] = (*tabulka)[i+1];
+        }
+    }
+
+    if(bUspech != 1){
+        printf("Jazdec nenajdeny");
+    }
+    else{        
+        (*velkost)--;
+        if(!((*tabulka) = (jazdec*)realloc((*tabulka),(*velkost) * sizeof(jazdec)))){
+            char* chybovaHlaska = (char*)calloc(256, sizeof(char));
+            strerror_s(chybovaHlaska, 256, (int)errno); // Konvertujem error kód na hlášku
+            printf("\nNemozno realokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
+            free(chybovaHlaska);
+            getchar();
+            exit(EXIT_FAILURE);
+        }
+        printf("Jazdec s menom \"%s %s\" bol vymazany.", menoJazdca, priezviskoJazdca);
+    }
+
+    vpisatDoSuboru((*tabulka), (*velkost));
+    free(priezviskoJazdca);
+    free(menoJazdca);
 }

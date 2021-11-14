@@ -72,6 +72,12 @@ int main(){
             case 'c':
                 change(&tabulka, velkost);
                 break;
+            case 'n':
+                newdriver(&tabulka, &velkost);
+                break;
+            case 'r':
+                rmdriver(&tabulka, &velkost);
+                break;
             case 'q':
                 uvolnenieJazdcov(&tabulka);
                 nacitatJazdcov(&tabulka, &velkost);
