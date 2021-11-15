@@ -1591,8 +1591,11 @@ void newdriver(jazdec** tabulka, size_t *velkost){
 
     vpisatDoSuboru((*tabulka), *velkost);
 
+    printf("\nJazdec s menom \"%s %s\" bol pridany.\n", (*tabulka)[(*velkost)-1].meno, (*tabulka)[(*velkost)-1].priezvisko);
+
 //*------------------------------------------------ Vypisovanie údajov ------------------------------------------------
 
+    printf("\n--------------------------------------------------------------------------\n");
     sum((*tabulka), *velkost);
 }
 
