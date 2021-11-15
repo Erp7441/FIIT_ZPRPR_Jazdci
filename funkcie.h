@@ -8,10 +8,6 @@
 
 */
 
-// TODO Gramatika
-// TODO Overiť nezáporny čas
-// TODO Pridat novu znacku
-
 //*---------------------------------------------------- Preprocesor ---------------------------------------------------
 
 // Program bol naprogramovaný v Visual Studio Code s GCC kompilátorom
@@ -21,11 +17,11 @@
 #include <string.h>
 #include <errno.h> // Umožňuje lepšie ošetrenie chýb v programe
 
-// TODO Mám definované všetky konštanty?
-
 #define VELKOST_BUFFERA 100
 #define VELKOST_CHYBOVEHO_BUFFERA 256
 #define POCET_KOL 5
+
+// Definícia konštánt aby sa program abstrakciou podobal jazyku C++
 #define true 1
 #define false 0
 #define bool int
@@ -47,9 +43,6 @@ typedef struct jazdec{
 
 // Funkcia na vytlačenie podpisu na obrazovku
 void podpis(char const* zadanie, char const* meno, char const* aisID){
-
-    // TODO Potiahnúť si array stringov, tie cyklicky vytlačiť na obrazovku rovnako ako tie 3 stringy predtým.
-    // TODO Pridať popis
 
 //*-------------------------------------------------- Dĺžka reťazca ---------------------------------------------------
 
@@ -663,7 +656,8 @@ int podobnostRetazcov(string retazec1, string retazec2){
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
     if(strlen(retazec1) < 1 || strlen(retazec2) < 1){
-        printf("\nChyba pri nacitavani retazcov"); // TODO Otestovat
+        printf("\nChyba pri nacitavani retazcov");
+        getchar();
         exit(EXIT_FAILURE);
     }
 
@@ -680,6 +674,7 @@ int podobnostRetazcov(string retazec1, string retazec2){
     return pocetZnakov;
 }
 
+// Overí či zadaná značka je z zoznamu značiek
 bool bSpravnaZnacka(string znacka){
     
 //*------------------------------------------------------ Postup ------------------------------------------------------
@@ -1009,17 +1004,18 @@ void gender(jazdec* tabulka, size_t velkost){
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
-    printf("\nZadajte pohlavie jazdca (m/f): ");
-    scanf_s("%c", &pohlavie, 1);
-    getchar();
+    do{
+        printf("\nZadajte pohlavie jazdca (m/f): ");
+        scanf_s(" %c", &pohlavie, 1);
+        getchar();
 
+        if(pohlavie != 'm' && pohlavie != 'f'){
+            printf("\nZadali ste nespravne pohlavie");
+        }
+    } while (pohlavie != 'm' && pohlavie != 'f');
+    
     if(!tabulka){
         printf("\nData zo suboru neboli nacitane");
-        return;
-    }
-
-    if(pohlavie != 'm' && pohlavie != 'f'){
-        printf("\nZadali ste nespravne pohlavie");
         return;
     }
 
@@ -1175,21 +1171,22 @@ void year(jazdec* tabulka, size_t velkost){
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
     float najlepsiCas = 0.f;
-    int indexJazdca = 0, indexCasu = 0, rok = 0;
+    int indexJazdca = 0, indexCasu = 0, rok = 0, pocetArgumentov = 0;
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
-    printf("\nZadajte rok narodenia jazdca: ");
-    scanf_s("%d", &rok, 4);
-    getchar();
+    do {
+        printf("\nZadajte rok narodenia jazdca: ");
+        pocetArgumentov = scanf_s(" %d", &rok, 4);
+        getchar();
 
+        if(pocetCislic(rok) != 4 || pocetArgumentov != 1){
+            printf("\nZadali ste nespravny rok\n");
+        }
+    } while(pocetCislic(rok) != 4 || pocetArgumentov != 1);
+    
     if(!tabulka){
         printf("\nData zo suboru neboli nacitane");
-        return;
-    }
-
-    if(pocetCislic(rok) != 4){
-        printf("\nZadali ste nespravny rok");
         return;
     }
 
@@ -1249,6 +1246,7 @@ void average(jazdec* tabulka, size_t velkost){
 
     float najlepsiPriemer = 0.f;
     int najlepsiPriemerIndex = 0;
+
     for(size_t i = 0; i < velkost; i++){
         
         //*----------------------------------------------- Premenné -----------------------------------------------
@@ -1279,7 +1277,7 @@ void under(jazdec* tabulka, size_t velkost){
 
     /*  
         1. Štart
-        2. Zadeklarujem si premenné "pocetKol", "cas"
+        2. Zadeklarujem si premenné "pocetKol", "cas" a "pocetArgumentov"
         3. Inicializujem premenné
             "pocetKol" -> na hodnotu 0
             "cas" -> na hodnotu 0
@@ -1294,12 +1292,19 @@ void under(jazdec* tabulka, size_t velkost){
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
     float cas = 0.f;
+    int pocetArgumentov = 0;
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
-    printf("\nZadajte cas: ");
-    scanf_s("%f", &cas, POCET_KOL);
-    getchar();
+    do {
+        printf("\nZadajte cas: ");
+        pocetArgumentov = scanf_s(" %f", &cas, POCET_KOL);
+        getchar();
+
+        if(cas < 0.f || pocetArgumentov != 1){
+            printf("\nZadali ste nespravny cas\n");
+        }
+    } while(cas < 0.f || pocetArgumentov != 1);
 
     if(!tabulka){
         printf("\nData zo suboru neboli nacitane");
@@ -1349,7 +1354,7 @@ void change(jazdec** tabulka, size_t velkost){
 
     /*  
         1. Štart
-        2. Zadeklarujem si premenné "podobnost", "poradoveCislo", "novyCas", "bUspech"...
+        2. Zadeklarujem si premenné "podobnost", "poradoveCislo", "novyCas", "pocetArgumentov", "bUspech"...
             ...a ukazovatele "priezviskoJazdca" a "parcialnePriezvisko"
         3. Inicializujem premenné a ukazovatele
             "podobnost" -> na hodnotu -1
@@ -1385,8 +1390,7 @@ void change(jazdec** tabulka, size_t velkost){
 
     string priezviskoJazdca = NULL;
     string parcialnePriezvisko = NULL;
-    int podobnost = -1;
-    int poradoveCislo = 0;
+    int podobnost = -1, poradoveCislo = 0, pocetArgumentov = 0;
     float novyCas = 0;	
     bool bUspech = false;
 
@@ -1434,23 +1438,27 @@ void change(jazdec** tabulka, size_t velkost){
         return;
     }
 
-    do
-    {
+    do{
         printf("Zadajte poradove cislo kola: ");
-        scanf_s("%d", &poradoveCislo, 1);
+        pocetArgumentov = scanf_s(" %d", &poradoveCislo, 1);
         getchar();
 
-        if(poradoveCislo < 1 || poradoveCislo > POCET_KOL){
+        if(poradoveCislo < 1 || poradoveCislo > POCET_KOL || pocetArgumentov != 1){
             printf("\nZadali ste nespravne poradove cislo kola (1-%d)\n", POCET_KOL);
         }
-    } while (poradoveCislo < 1 || poradoveCislo > POCET_KOL);
+    } while (poradoveCislo < 1 || poradoveCislo > POCET_KOL || pocetArgumentov != 1);
     
     
+    do{
+        printf("Zadajte novy cas: ");
+        pocetArgumentov = scanf_s(" %f", &novyCas, 1);
+        getchar();
 
-    printf("Zadajte novy cas: ");
-    scanf_s("%f", &novyCas, 1);
-    getchar();
-
+        if(novyCas < 0.f || pocetArgumentov != 1){
+            printf("\nZadali ste nespravny cas\n\n");
+        }
+    } while (novyCas < 0.f || pocetArgumentov != 1);
+    
 //*-------------------------------------------------- Hladanie jazdca -------------------------------------------------
 
     for(size_t i = 0; i < velkost; i++){
@@ -1470,15 +1478,14 @@ void newdriver(jazdec** tabulka, size_t *velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // TODO Dopísať použitie "bSpravnyUdaj"
-
     /*  
         1. Štart
-        2. Zadeklarujem si premennú "velkost", "bSpravnyUdaj" a ukazovateľ "tabulka"...
+        2. Zadeklarujem si premennú "velkost", "bSpravnyUdaj", "pocetArgumentov" a ukazovateľ "tabulka"...
         3. Inicializujem premenné a ukazovatele
             "tabulka" -> na hodnotu tabulky dat
             "velkost" -> na hodnotu počet dat v tabulke
             "bSpravnyUdaj" -> na hodnotu false (0)
+            "pocetArgumentov" -> na hodnotu 0
         4. Prirátam k "velkost" jednotku
         5. Realokujem dynamické pole "tabulka"
         6. Načítam všetky údaje z klávesnice do poľa "tabulka"
@@ -1491,6 +1498,7 @@ void newdriver(jazdec** tabulka, size_t *velkost){
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
     bool bSpravnyUdaj = false;
+    int pocetArgumentov = 0; // Počet úspešne načítaných znakov scanfom
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
@@ -1524,13 +1532,25 @@ void newdriver(jazdec** tabulka, size_t *velkost){
     scanf_s(" %s", (*tabulka)[(*velkost)-1].priezvisko, VELKOST_BUFFERA);
     getchar();
 
-    printf("Zadajte pohlavie jazdca: ");
-    scanf_s(" %c", &(*tabulka)[(*velkost)-1].pohlavie, 1);
-    getchar();
+    do{
+        printf("Zadajte pohlavie jazdca: ");
+        scanf_s(" %c", &(*tabulka)[(*velkost)-1].pohlavie, 1);
+        getchar();
 
-    printf("Zadajte rok narodenia jazdca: ");
-    scanf_s(" %d", &(*tabulka)[(*velkost)-1].rok, 1);
-    getchar();
+        if((*tabulka)[(*velkost)-1].pohlavie != 'm' && (*tabulka)[(*velkost)-1].pohlavie != 'f'){
+            printf("\nZadali ste nespravne pohlavie jazdca\n\n");
+        }
+    } while ((*tabulka)[(*velkost)-1].pohlavie != 'm' && (*tabulka)[(*velkost)-1].pohlavie != 'f');
+
+    do{
+        printf("Zadajte rok narodenia jazdca: ");
+        pocetArgumentov = scanf_s(" %d", &(*tabulka)[(*velkost)-1].rok, 1);
+        getchar();
+
+        if(pocetCislic((*tabulka)[(*velkost)-1].rok) != 4 || pocetArgumentov != 1){
+            printf("\nZadali ste nespravny rok narodenia\n\n");
+        }
+    } while(pocetCislic((*tabulka)[(*velkost)-1].rok) != 4 || pocetArgumentov != 1);
 
     do{
         printf("Zadajte znacku auta jazdca: ");
@@ -1544,15 +1564,22 @@ void newdriver(jazdec** tabulka, size_t *velkost){
                 (*tabulka)[(*velkost)-1].znacka[i] += 32;
             }
         }
+
         if(bSpravnyUdaj == false){
-            printf("\nNespravna znacka\n");
+            printf("\nNespravna znacka\n\n");
         }
     } while (bSpravnyUdaj == false);
 
     for (size_t i = 0; i < POCET_KOL; i++){
-        printf("Zadajte %zu. cas jazdca: ", i + 1);
-        scanf_s("%f", &(*tabulka)[(*velkost)-1].casy[i], 1);
-        getchar();
+        do {
+            printf("Zadajte %zu. cas jazdca: ", i + 1);
+            pocetArgumentov = scanf_s(" %f", &(*tabulka)[(*velkost)-1].casy[i], 1);
+            getchar();
+
+            if((*tabulka)[(*velkost)-1].casy[i] < 0.f || pocetArgumentov != 1){
+                printf("\nZadali ste nespravny cas\n\n");
+            }
+        } while((*tabulka)[(*velkost)-1].casy[i] < 0.f || pocetArgumentov != 1);
     }
 
 //*------------------------------------------------ Vpisovanie údajov -------------------------------------------------
