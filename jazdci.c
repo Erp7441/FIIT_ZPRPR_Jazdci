@@ -34,16 +34,32 @@ int main(){
 
         //*----------------------------------------------- Inicializácia ----------------------------------------------
         
-        // TODO oramovať menu (pripadne spraviť reusable funkciu pre menu)
-        printf("\n\ns - Sum\nd - Driver\nl - Lap\ng - Gender\nb - Brand\ny - Year\na - Average\nu - Under\nc - Change\nn - New Driver\nr - Remove Driver\nq - Reload\nx - Exit");
+        printf("\n\n-------------------------------------");
+        printf("\n\t\t\t\t    |");
+        printf("\ns - Sum\t\t\t\t    |");
+        printf("\nd - Driver\t\t\t    |");
+        printf("\nl - Lap\t\t\t\t    |");
+        printf("\ng - Gender\t\t\t    |");
+        printf("\nb - Brand\t\t\t    |");
+        printf("\ny - Year\t\t\t    |");
+        printf("\na - Average\t\t\t    |");
+        printf("\nu - Under\t\t\t    |");
+        printf("\nc - Change\t\t\t    |");
+        printf("\nn - New Driver\t\t\t    |");
+        printf("\nr - Remove Driver\t\t    |");
+        printf("\nq - Reload\t\t\t    |");
+        printf("\nx - Exit\t\t\t    |");
+        printf("\n\t\t\t\t    |");
+        printf("\n-------------------------------------");
+        
         printf("\nVolba: ");
-
         // Medzerou pri "%c" odstránim nadbytočnú medzeru v bufferi pri návrate z funkcie do mainu po zadaní písmenka
         scanf_s(" %c", &vyber, 1);
         getchar(); // Odstráni medzeru od scanfu na konci buffera
 
         //*---------------------------------------------- Výber možnosti ----------------------------------------------
-
+        
+        printf("\n--------------------------------------------------------------------------\n");
         switch (vyber){
             case 's':
                 sum(tabulka, velkost);
@@ -85,12 +101,14 @@ int main(){
                 break;
             case 'x':
                 uvolnenieJazdcov(&tabulka);
-                printf("\nUkoncujem...\n");
+                printf("\nUkoncujem...");
                 break;
             default:
                 printf("\nChyba: Zly vyber");
                 break;
         }
+        printf("\n\n--------------------------------------------------------------------------");
+
     } while (vyber != 'x');
 
     return 0;

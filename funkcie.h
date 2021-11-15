@@ -1389,6 +1389,7 @@ void change(jazdec** tabulka, size_t velkost){
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
     string priezviskoJazdca = NULL;
+    string menoJazdca = NULL;
     string parcialnePriezvisko = NULL;
     int podobnost = -1, poradoveCislo = 0, pocetArgumentov = 0;
     float novyCas = 0;	
@@ -1403,6 +1404,7 @@ void change(jazdec** tabulka, size_t velkost){
     if(
         !(priezviskoJazdca = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))
         || !(parcialnePriezvisko = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))
+        || !(menoJazdca = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))
     ){
         string chybovaHlaska = (string)calloc(VELKOST_CHYBOVEHO_BUFFERA, sizeof(char));
         strerror_s(chybovaHlaska, VELKOST_CHYBOVEHO_BUFFERA, (int)errno); // Konvertujem error kód na hlášku
@@ -1464,10 +1466,13 @@ void change(jazdec** tabulka, size_t velkost){
     for(size_t i = 0; i < velkost; i++){
         if(strcmp((*tabulka)[i].priezvisko, priezviskoJazdca) == 0){
             (*tabulka)[i].casy[poradoveCislo-1] = novyCas;
+            strcpy_s(menoJazdca, strlen((*tabulka)[i].meno)+1, (*tabulka)[i].meno);
         }
     }
 
     vpisatDoSuboru((*tabulka), velkost);
+
+    printf("\nJazdec s menom \"%s %s\" bol upraveny.", menoJazdca, priezviskoJazdca);
 
     free(priezviskoJazdca);
     free(parcialnePriezvisko);
