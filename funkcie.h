@@ -8,7 +8,9 @@
 
 */
 
-// TODO Zmazať prebytočne printf("\n"); príkazy kde sa to môže
+// TODO Gramatika
+// TODO Overiť nezáporny čas
+// TODO Zoznam povolených značiek
 
 //*---------------------------------------------------- Preprocesor ---------------------------------------------------
 
@@ -38,7 +40,7 @@ typedef struct jazdec{
     string znacka;
     char pohlavie;
     int rok;
-    float casy[5];
+    float casy[POCET_KOL];
 }jazdec;
 
 //*-------------------------------------------------- Pomocné funkcie -------------------------------------------------
@@ -585,9 +587,27 @@ void dealokovat2Dpole(string** zoznam, size_t velkost){
 // Vpíše tabuľku z programu do súboru
 void vpisatDoSuboru(jazdec* tabulka, size_t velkost){
 
-    // TODO Dorobiť popis a sekcie
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    /*
+        1. Štart
+        2. Zadeklarujem si ukazovateľ "subor", premennú "velkost" a premennú "tabulka"
+        3. Otvoríme súbor
+        4. Existuje pole "tabulka"?
+            TRUE: Tak...
+                ...Cyklicky vpíšem každé políčko dynamického poľa "tabulka" v danom formáte
+            FALSE: Skončím program
+        5. Stop
+    */
+
+//*------------------------------------------------- Vpísanie do súboru -------------------------------------------------
 
     FILE* subor;
+
+    if(!tabulka){
+        printf("\nJazdci neboli nacitany");
+        return;
+    }
 
     if((fopen_s(&subor, "jazdci.csv", "w")) != false){
         string chybovaHlaska = (string)calloc(VELKOST_CHYBOVEHO_BUFFERA, sizeof(char));
@@ -622,8 +642,32 @@ void vpisatDoSuboru(jazdec* tabulka, size_t velkost){
 // Zistí podobnosť dvoch reťazcov
 int podobnostRetazcov(string retazec1, string retazec2){
 
-    // TODO Dorobiť popis a sekcie
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
     // TODO Fixnúť bug s "Cer" navrhuje ako "Baudelaire" miesto "Cermak". Problem sú dve 'e' v "Baudelaire"
+
+    /*
+        1. Štart
+        2. Zadeklarujem premennú "pocetZnakov" a dva ukazovatele "retazec1" a "retazec2"
+        3. Je "retazec1" alebo "retazec2" menší ako 1?
+            TRUE: Tak...
+                ...Cyklicky prejdem každý znak v "retazec1"...
+                    ...Cyklicky prejdem každý znak v "retazec2"...
+                        ...Je aktuálny znak v "retazec1" rovný aktuálnemu znaku v "retazec2"?
+                            TRUE: Tak pripočítam k premennej "pocetZnakov" jednotku
+                            FALSE: Pokračujem ďalej
+            FALSE: Skončím program
+        4. Stop
+    */
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    if(strlen(retazec1) < 1 || strlen(retazec2) < 1){
+        printf("\nChyba pri nacitavani retazcov"); // TODO Otestovat
+        exit(EXIT_FAILURE);
+    }
+
+//*------------------------------------------------- Uvoľnenie pamäte -------------------------------------------------
 
     int pocetZnakov = 0;
     for(size_t i = 0; i < strlen(retazec1); i++){
@@ -694,21 +738,28 @@ void driver(jazdec* tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // TODO Dorobiť do popisu "podobnosť"
     /*
         1. Štart
-        2. Zadeklarujem si ukazovateľ "priezviskoJazdca" a premennú "bUspech"
+        2. Zadeklarujem si ukazovatele "priezviskoJazdca", "parcialnePriezvisko" a premennú "bUspech"
         3. Inicializujem premennú a ukazovateľ
             "priezviskoJazdca" -> zatiaľ na prázdnu hodnotu
+            "parcialnePriezvisko" -> zatiaľ na prázdnu hodnotu
             "bUspech" -> na hodnotu false (0)
-        4. Alokujem dynamické pole "priezviskoJazdca"
+        4. Alokujem dynamické pole "priezviskoJazdca" a "parcialnePriezvisko"
         5. Načítam priezvisko z klávesnice do poľa "priezviskoJazdca"
         6. Prejdem celé pole jazdcov
         7. Podla priezviska vyhľadám jazdca
-        8. Existuje jazdec?
+        8. Nenašiel som zatiaľ jazdca a zároveň je aktuálne priezvisko podobné zadanému z klávesnice?
+            TRUE: Uložím si jeho priezvisko do ukazovatela "parcialnePriezvisko"
+            FALSE: Pokračujem ďalej
+        9. Existuje jazdec?
             TRUE: Tak nastavím premennú "bUspech" na true (1) a urobím formátovaný výpis jazdca
-            FALSE: Vypíšeme chybovú hlášku napr. "Jazdec nenajdeny"
-        9. Stop
+            FALSE: Tak...
+                ...Vypíšeme chybovú hlášku napr. "Jazdec nenajdeny"...
+                ...Existuje ukazovateľ "parcialnePriezvisko"?
+                    TRUE: Vypíšeme "Nemysleli ste..."
+                    FALSE: Pokračujem ďalej
+        10. Stop
     */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
@@ -1182,7 +1233,7 @@ void under(jazdec* tabulka, size_t velkost){
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
     printf("\nZadajte cas: ");
-    scanf_s("%f", &cas, 5);
+    scanf_s("%f", &cas, POCET_KOL);
     getchar();
 
     if(!tabulka){
@@ -1231,12 +1282,39 @@ void change(jazdec** tabulka, size_t velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // TODO Vytvoriť postup
-    // TODO Overiť hodnoty z klávesnice
-    // TODO Dorobiť do popisu "podobnosť"
-    // Buď budeš fseekovať a priamo meniť v súbore
-    // Alebo môžeš zmeniť údaje v poli a potom ho celé printnúť do súboru
-    // Tretia možnosť je printnúť iba zmenený údaj na dánú pozíciu v súbore (ale to bude asi hard)
+    /*  
+        1. Štart
+        2. Zadeklarujem si premenné "podobnost", "poradoveCislo", "novyCas", "bUspech"...
+            ...a ukazovatele "priezviskoJazdca" a "parcialnePriezvisko"
+        3. Inicializujem premenné a ukazovatele
+            "podobnost" -> na hodnotu -1
+            "poradoveCislo" -> na hodnotu 0
+            "novyCas" -> na hodnotu 0
+            "bUspech" -> na hodnotu false (0)
+            "priezviskoJazdca" -> zatiaľ na prázdnu hodnotu
+            "parcialnePriezvisko" -> zatiaľ na prázdnu hodnotu
+        4. Alokujem dynamické pole "priezviskoJazdca" a "parcialnePriezvisko"
+        5. Načítam priezvisko z klávesnice do poľa "priezviskoJazdca"
+        6. Prejdem celé pole a nájdem jazdca
+        7. Podla priezviska vyhľadám jazdca
+        8. Nenašiel som zatiaľ jazdca a zároveň je aktuálne priezvisko podobné zadanému z klávesnice?
+            TRUE: Uložím si jeho priezvisko do ukazovateľa "parcialnePriezvisko"
+            FALSE: Pokračujem ďalej
+        9. Existuje jazdec?
+            TRUE: Tak nastavím premennú "bUspech" na true (1)
+            FALSE: Pokračujem ďalej
+        10. Načítam poradové číslo kola z klávesnice do premennej "poradoveCislo"
+        11. Zadal používateľ správnu hodnotu?
+            TRUE: Pokračujem ďalej
+            FALSE: Vypýtam si hodnotu znovu
+        12. Načítam nový čas kola z klávesnice do premennej "novyCas"
+        13. Prejdem celé pole a nájdem jazdca
+        14. Existuje jazdec?
+            TRUE: Prepíšem hodnotu na pozícií "poradoveCislo" na hodnotu premennej "novyCas"
+            FALSE: Pokračujem ďalej
+        15. Vpíšem údaje z poľa do súboru
+        16. Stop
+    */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
@@ -1297,10 +1375,10 @@ void change(jazdec** tabulka, size_t velkost){
         scanf_s("%d", &poradoveCislo, 1);
         getchar();
 
-        if(poradoveCislo < 1 || poradoveCislo > 5){
-            printf("\nZadali ste nespravne poradove cislo kola (1-5)\n");
+        if(poradoveCislo < 1 || poradoveCislo > POCET_KOL){
+            printf("\nZadali ste nespravne poradove cislo kola (1-%d)\n", POCET_KOL);
         }
-    } while (poradoveCislo < 1 || poradoveCislo > 5);
+    } while (poradoveCislo < 1 || poradoveCislo > POCET_KOL);
     
     
 
@@ -1327,11 +1405,19 @@ void newdriver(jazdec** tabulka, size_t *velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // TODO Vytvoriť postup
-    // TODO Overiť hodnoty z klávesnice
-    // Buď budeš fseekovať a priamo meniť v súbore
-    // Alebo môžeš zmeniť údaje v poli a potom ho celé printnúť do súboru
-    // Tretia možnosť je printnúť iba zmenený údaj na dánú pozíciu v súbore (ale to bude asi hard)
+    /*  
+        1. Štart
+        2. Zadeklarujem si premennú "velkost" a ukazovateľ "tabulka"...
+        3. Inicializujem premenné a ukazovatele
+            "tabulka" -> na hodnotu tabulky dat
+            "velkost" -> na hodnotu počet dat v tabulke
+        4. Prirátam k "velkost" jednotku
+        5. Realokujem dynamické pole "tabulka"
+        6. Načítam všetky údaje z klávesnice do poľa "tabulka"
+        7. Vpíšem údaje z poľa do súboru
+        8. Vypíšem údaje na obrazovku
+        9. Stop
+    */
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
@@ -1354,6 +1440,8 @@ void newdriver(jazdec** tabulka, size_t *velkost){
         getchar();
         exit(EXIT_FAILURE);
     }
+
+//*------------------------------------------------- Načítanie údajov -------------------------------------------------
 
     printf("\nZadajte meno jazdca: ");
     scanf_s(" %s", (*tabulka)[(*velkost)-1].meno, VELKOST_BUFFERA);
@@ -1387,7 +1475,12 @@ void newdriver(jazdec** tabulka, size_t *velkost){
         getchar();
     }
 
+//*------------------------------------------------ Vpisovanie údajov -------------------------------------------------
+
     vpisatDoSuboru((*tabulka), *velkost);
+
+//*------------------------------------------------ Vypisovanie údajov ------------------------------------------------
+
     sum((*tabulka), *velkost);
 }
 
@@ -1396,25 +1489,41 @@ void rmdriver(jazdec** tabulka, size_t *velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // TODO Vytvoriť postup
-    // TODO Dorobiť do popisu "podobnosť"
-
-    /*
+    /*  
         1. Štart
-        2. Zadeklarujem si ukazovateľ "priezviskoJazdca" a premennú "bUspech"
-        3. Inicializujem premennú a ukazovateľ
-            "priezviskoJazdca" -> zatiaľ na prázdnu hodnotu
-            "menoJazdca" -> zatiaľ na prázdnu hodnotu
+        2. Zadeklarujem si premenné "velkost", "podobnost" a "bUspech"...
+            ...a ukazovatele "priezviskoJazdca", "menoJazdca", "parcialnePriezvisko" a "tabulka"
+        3. Inicializujem premenné a ukazovatele
+            "podobnost" -> na hodnotu -1
             "bUspech" -> na hodnotu false (0)
-        4. Alokujem dynamické pole "priezviskoJazdca"
-        4. Alokujem dynamické pole "menoJazdca"
+            "priezviskoJazdca" -> zatiaľ na prázdnu hodnotu
+            "parcialnePriezvisko" -> zatiaľ na prázdnu hodnotu
+            "menoJazdca" -> zatiaľ na prázdnu hodnotu
+            "tabulka" -> na hodnotu tabuľky dát
+            "velkost" -> na hodnotu počet dát v tabuľke
+        4. Alokujem dynamické pole "priezviskoJazdca", "parcialnePriezvisko" a "menoJazdca"
         5. Načítam priezvisko z klávesnice do poľa "priezviskoJazdca"
         6. Prejdem celé pole jazdcov
-        7. Podla priezviska vyhľadám jazdca
+        7. Nenašiel som zatiaľ jazdca a zároveň je aktuálne priezvisko podobné zadanému z klávesnice?
+            TRUE: Uložím si jeho priezvisko do ukazovateľa "parcialnePriezvisko"
+            FALSE: Pokračujem ďalej
         8. Existuje jazdec?
-            TRUE: Tak nastavím premennú "bUspech" na true (1) a urobím formátovaný výpis jazdca
-            FALSE: Vypíšeme chybovú hlášku napr. "Jazdec nenajdeny"
-        9. Stop
+            TRUE: Tak nastavím premennú "bUspech" na true (1) a uložím si jeho meno do ukazovateľa "menoJazdca"
+            FALSE: Pokračujem ďalej
+        9. Je "bUspech" rovné true (1) a nie sme na poslednom jazdcovi?
+            TRUE: Tak nastavím aktuálnu hodnotu jazdca na ďalšiu hodnotu jazdca
+            FALSE: Pokračujem ďalej
+        10. Nie je "bUspech" rovné true (1)?
+            TRUE: Tak...
+                ...Vypíšeme chybovú hlášku napr. "Jazdec nenajdeny"...
+                ...Existuje ukazovateľ "parcialnePriezvisko"?
+                    TRUE: Vypíšeme "Nemysleli ste..."
+                    FALSE: Pokračujem ďalej
+            FALSE: Tak...
+                ...Odrátam od "velkost" jednotku...
+                ...Realokujem dynamické pole "tabulka"...
+                ...Vypíšem "Jazdec s menom "..." bol vymazany."
+        11. Stop
     */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
@@ -1448,7 +1557,7 @@ void rmdriver(jazdec** tabulka, size_t *velkost){
     scanf_s(" %s", priezviskoJazdca, VELKOST_BUFFERA);
     getchar();
 
-//*-------------------------------------------------- Hladanie jazdca -------------------------------------------------
+//*-------------------------------------------------- Zmazanie jazdca -------------------------------------------------
 
     printf("\n");
     for(size_t i = 0; i < *velkost; i++){
@@ -1458,7 +1567,7 @@ void rmdriver(jazdec** tabulka, size_t *velkost){
                 strcpy_s(parcialnePriezvisko, VELKOST_BUFFERA, (*tabulka)[i].priezvisko);
             }
         }
-        if(strcmp((*tabulka)[i].priezvisko, priezviskoJazdca) == 0 && bUspech == false){
+        if(bUspech == false && strcmp((*tabulka)[i].priezvisko, priezviskoJazdca) == 0){
             bUspech = true;
             strcpy_s(menoJazdca, VELKOST_BUFFERA, (*tabulka)[i].meno);
         }
