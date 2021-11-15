@@ -10,7 +10,7 @@
 
 // TODO Gramatika
 // TODO Overiť nezáporny čas
-// TODO Zoznam povolených značiek
+// TODO Pridat novu znacku
 
 //*---------------------------------------------------- Preprocesor ---------------------------------------------------
 
@@ -273,7 +273,7 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
 
     /*
         1. Štart
-        2. Zadeklarujem si ukazovatele "tabulka", "velkost", "subor" a premennú "riadok"
+        2. Zadeklarujem si ukazovatele "tabulka", "velkost", "subor" a pole "riadok"
         3. Inicializujem premenné a ukazovatele
             "subor" -> zatiaľ na prázdnu hodnotu
             "riadok" -> zatiaľ na prázdnu hodnotu
@@ -678,6 +678,71 @@ int podobnostRetazcov(string retazec1, string retazec2){
         }
     }
     return pocetZnakov;
+}
+
+bool bSpravnaZnacka(string znacka){
+    
+//*------------------------------------------------------ Postup ------------------------------------------------------
+
+    /*
+        1. Štart
+        2. Zadeklarujem si ukazovatele "znacka" a pole "riadok"
+        3. Inicializujem premenné a ukazovatele
+            "riadok" -> zatiaľ na prázdnu hodnotu
+            "tabulka" -> na hodnotu reťazca ktorý chceme porovnáť
+        4. Otvorím si súbor pomocou ukazovateľa "subor"
+        5. Konvertujem "znacka" na malé znaky
+        6. Čítam súbor riadok po riadku pričom...
+            6.1. Prečítam riadok
+            6.2. Konvertujem "riadok" na malé znaky
+            6.3. Je "riadok" rovny "znacka"?
+                TRUE: Tak...
+                    ...Vrátim hodnotu true (1)...
+                    ...Stop
+                FALSE: Pokračujem ďalej
+        7. Vrátim hodnotu false (0)
+        8. Stop
+    */
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    FILE* subor;
+    char riadok[VELKOST_BUFFERA];
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    // Bezpečné otváranie súboru...
+        // ..."fopen_s" vygeneruje error code a rovno ho porovná v podmienke...
+        // ...Následne sa vypíše na obrazovku chybovú hlásku vygenerovanú podla error kódu
+    if((fopen_s(&subor, "znacky.txt", "r")) != false){
+        string chybovaHlaska = (string)calloc(VELKOST_CHYBOVEHO_BUFFERA, sizeof(char));
+        strerror_s(chybovaHlaska, VELKOST_CHYBOVEHO_BUFFERA, (int)errno); // Konvertujem error kód na hlášku
+        printf("\nSubor nie je mozne precitat");
+        printf("\nNemozno otvorit subor znacky.txt\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
+        free(chybovaHlaska);
+        getchar();
+        exit(EXIT_FAILURE);
+    }
+
+    for (size_t j = 0; j < strlen(znacka); j++){
+        if((znacka[j] >= 65 && znacka[j] <= 90)){
+            znacka[j] = znacka[j]+32;
+        }
+    }
+    
+    while(fgets(riadok, VELKOST_BUFFERA, subor)){
+        riadok[strcspn(riadok, "\n")] = 0;
+        for (size_t j = 0; j < strlen(riadok); j++){
+            if((riadok[j] >= 65 && riadok[j] <= 90)){
+                riadok[j] = riadok[j]+32;
+            }
+        }
+
+        if(strcmp(znacka, riadok) == 0){
+            return true;
+        }
+    }
+    return false;
 }
 
 //*-------------------------------------------------- Hlavné funkcie --------------------------------------------------
@@ -1405,19 +1470,27 @@ void newdriver(jazdec** tabulka, size_t *velkost){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
+    // TODO Dopísať použitie "bSpravnyUdaj"
+
     /*  
         1. Štart
-        2. Zadeklarujem si premennú "velkost" a ukazovateľ "tabulka"...
+        2. Zadeklarujem si premennú "velkost", "bSpravnyUdaj" a ukazovateľ "tabulka"...
         3. Inicializujem premenné a ukazovatele
             "tabulka" -> na hodnotu tabulky dat
             "velkost" -> na hodnotu počet dat v tabulke
+            "bSpravnyUdaj" -> na hodnotu false (0)
         4. Prirátam k "velkost" jednotku
         5. Realokujem dynamické pole "tabulka"
         6. Načítam všetky údaje z klávesnice do poľa "tabulka"
+            6.1 Overujem správnosť údajov
         7. Vpíšem údaje z poľa do súboru
         8. Vypíšem údaje na obrazovku
         9. Stop
     */
+
+//*----------------------------------------------------- Premenné -----------------------------------------------------
+
+    bool bSpravnyUdaj = false;
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
@@ -1452,22 +1525,29 @@ void newdriver(jazdec** tabulka, size_t *velkost){
     getchar();
 
     printf("Zadajte pohlavie jazdca: ");
-    scanf_s("%c", &(*tabulka)[(*velkost)-1].pohlavie, 1);
+    scanf_s(" %c", &(*tabulka)[(*velkost)-1].pohlavie, 1);
     getchar();
 
     printf("Zadajte rok narodenia jazdca: ");
-    scanf_s("%d", &(*tabulka)[(*velkost)-1].rok, 1);
+    scanf_s(" %d", &(*tabulka)[(*velkost)-1].rok, 1);
     getchar();
 
-    printf("Zadajte znacku auta jazdca: ");
-    fgets((*tabulka)[(*velkost)-1].znacka, VELKOST_BUFFERA, stdin);
-    (*tabulka)[(*velkost)-1].znacka[strcspn((*tabulka)[(*velkost)-1].znacka, "\n")] = 0;
+    do{
+        printf("Zadajte znacku auta jazdca: ");
+        fgets((*tabulka)[(*velkost)-1].znacka, VELKOST_BUFFERA, stdin);
+        (*tabulka)[(*velkost)-1].znacka[strcspn((*tabulka)[(*velkost)-1].znacka, "\n")] = 0;
 
-    for (size_t i = 0; i < strlen((*tabulka)[(*velkost)-1].znacka); i++){
-        if(((*tabulka)[(*velkost)-1].znacka[i]) >= 65 && ((*tabulka)[(*velkost)-1].znacka[i]) <= 90) {
-            (*tabulka)[(*velkost)-1].znacka[i] += 32;
+        bSpravnyUdaj = bSpravnaZnacka((*tabulka)[(*velkost)-1].znacka);
+
+        for (size_t i = 0; i < strlen((*tabulka)[(*velkost)-1].znacka); i++){
+            if(((*tabulka)[(*velkost)-1].znacka[i]) >= 65 && ((*tabulka)[(*velkost)-1].znacka[i]) <= 90) {
+                (*tabulka)[(*velkost)-1].znacka[i] += 32;
+            }
         }
-    }
+        if(bSpravnyUdaj == false){
+            printf("\nNespravna znacka\n");
+        }
+    } while (bSpravnyUdaj == false);
 
     for (size_t i = 0; i < POCET_KOL; i++){
         printf("Zadajte %zu. cas jazdca: ", i + 1);
