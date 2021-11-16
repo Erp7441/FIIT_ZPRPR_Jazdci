@@ -417,7 +417,7 @@ void nacitatJazdcov(jazdec** tabulka, size_t* velkost){
         //*---------------------------------------- Nahranie zvyšných údajov ---------------------------------------
 
         // ...nemusím uvoľňovať údaj lebo pri prechádzaní tokenov reťazca sa staré sami zmažú
-        if(!(udaj = (string)calloc(VELKOST_BUFFERA,sizeof(char)))){ // TODO Cppcheck false positive...
+        if(!udaj && !(udaj = (string)calloc(VELKOST_BUFFERA,sizeof(char)))){
             string chybovaHlaska = (string)calloc(VELKOST_CHYBOVEHO_BUFFERA, sizeof(char));
             strerror_s(chybovaHlaska, VELKOST_CHYBOVEHO_BUFFERA, (int)errno); // Konvertujem error kód na hlášku
             printf("\nNemozno alokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
@@ -1552,7 +1552,7 @@ void newdriver(jazdec** tabulka, size_t *velkost){
     getchar();
 
     do{
-        printf("Zadajte pohlavie jazdca: ");
+        printf("Zadajte pohlavie jazdca (m/f): ");
         scanf_s(" %c", &(*tabulka)[(*velkost)-1].pohlavie, 1);
         getchar();
 
