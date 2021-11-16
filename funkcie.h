@@ -21,7 +21,7 @@
 #define VELKOST_CHYBOVEHO_BUFFERA 256
 #define POCET_KOL 5
 
-// Definícia konštánt aby sa program abstrakciou podobal jazyku C++
+// Definícia konštánt aby sa kód podobal abstrakciou jazyku C++
 #define true 1
 #define false 0
 #define bool int
@@ -527,7 +527,7 @@ void alokovat2Dpole(string** zoznam, size_t velkost){
         5. Stop
     */
 
-//*-------------------------------------------------- Alokácia pamäte -------------------------------------------------
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
     if(!((*zoznam) = (string*)malloc(velkost * sizeof(string)))){
         string chybovaHlaska = (string)calloc(VELKOST_CHYBOVEHO_BUFFERA, sizeof(char));
@@ -537,6 +537,9 @@ void alokovat2Dpole(string** zoznam, size_t velkost){
         getchar();
         exit(EXIT_FAILURE);
     }
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
     for (size_t i = 0; i < velkost; i++){
         if(!((*zoznam)[i] = (string)calloc(VELKOST_BUFFERA, sizeof(char)))){
             string chybovaHlaska = (string)calloc(VELKOST_CHYBOVEHO_BUFFERA, sizeof(char));
@@ -593,9 +596,11 @@ void vpisatDoSuboru(jazdec* tabulka, size_t velkost){
         5. Stop
     */
 
-//*------------------------------------------------- Vpísanie do súboru -------------------------------------------------
+//*----------------------------------------------------- Premenné -----------------------------------------------------
 
     FILE* subor;
+
+//*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
     if(!tabulka){
         printf("\nJazdci neboli nacitany");
@@ -611,6 +616,8 @@ void vpisatDoSuboru(jazdec* tabulka, size_t velkost){
         getchar();
         exit(EXIT_FAILURE);
     }
+
+//*------------------------------------------------ Vpísanie do súboru -----------------------------------------------
 
     for(size_t i = 0; i < velkost; i++){
         fprintf(subor, "%s %s;%c;%d;%s"
@@ -637,17 +644,19 @@ int podobnostRetazcov(string retazec1, string retazec2){
 
 //*------------------------------------------------------ Postup ------------------------------------------------------
 
-    // TODO Fixnúť bug s "Cer" navrhuje ako "Baudelaire" miesto "Cermak". Problem sú dve 'e' v "Baudelaire"
-
     /*
         1. Štart
-        2. Zadeklarujem premennú "pocetZnakov" a dva ukazovatele "retazec1" a "retazec2"
+        2. Zadeklarujem premennú "indexPodobnosti" a dva ukazovatele "retazec1" a "retazec2"
         3. Je "retazec1" alebo "retazec2" menší ako 1?
             TRUE: Tak...
                 ...Cyklicky prejdem každý znak v "retazec1"...
                     ...Cyklicky prejdem každý znak v "retazec2"...
                         ...Je aktuálny znak v "retazec1" rovný aktuálnemu znaku v "retazec2"?
-                            TRUE: Tak pripočítam k premennej "pocetZnakov" jednotku
+                            TRUE: Tak...
+                                ...pripočítam k premennej "indexPodobnosti" jednotku...
+                                ...Je je pozcia znak v "retazec1" rovna pozicií znaku v "retazec2"
+                                    TRUE: Tak pripočítam k "indexPodobnosti" jednotku
+                                    FALSE: Pokračujem ďalej
                             FALSE: Pokračujem ďalej
             FALSE: Skončím program
         4. Stop
@@ -661,17 +670,20 @@ int podobnostRetazcov(string retazec1, string retazec2){
         exit(EXIT_FAILURE);
     }
 
-//*------------------------------------------------- Uvoľnenie pamäte -------------------------------------------------
+//*------------------------------------------------ Podobnosť reťazcov ------------------------------------------------
 
-    int pocetZnakov = 0;
+    int indexPodobnosti = 0;
     for(size_t i = 0; i < strlen(retazec1); i++){
         for(size_t j = 0; j < strlen(retazec2); j++){
             if(retazec1[i] == retazec2[j]){
-                pocetZnakov++;
+                indexPodobnosti++;
+                if(i == j){
+                    indexPodobnosti++;
+                }
             }
         }
     }
-    return pocetZnakov;
+    return indexPodobnosti;
 }
 
 // Overí či zadaná značka je z zoznamu značiek
@@ -724,6 +736,8 @@ bool bSpravnaZnacka(string znacka){
             znacka[j] = znacka[j]+32;
         }
     }
+
+//*-------------------------------------------------- Kontrola značky -------------------------------------------------
     
     while(fgets(riadok, VELKOST_BUFFERA, subor)){
         riadok[strcspn(riadok, "\n")] = 0;
