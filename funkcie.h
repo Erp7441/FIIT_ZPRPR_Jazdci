@@ -8,6 +8,8 @@
 
 */
 
+// TODO dorobiť funkcie na zmenu značky auta, mena, priezviska, roku narodenia a genderu?
+
 //*---------------------------------------------------- Preprocesor ---------------------------------------------------
 
 // Program bol naprogramovaný v Visual Studio Code s GCC kompilátorom
@@ -1343,7 +1345,10 @@ void under(jazdec* tabulka, size_t velkost){
         6. Je čas menší alebo rovný môjmu uloženému času
             TRUE: Tak nastavím premennú "bExistuje" na hodnotu true (1) a spravím formátovaný výpis časov
             FALSE: Pokračujem ďalej
-        7. Stop
+        7. Existuje jazdec ktorý má čas menší alebo rovný môjmu uloženému času
+            TRUE: Pokračujem ďalej
+            FALSE: Vypíšeme chybovú hlášku napr. "Jazdec nenajdeny"
+        8. Stop
     */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
