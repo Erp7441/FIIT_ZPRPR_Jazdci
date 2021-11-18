@@ -10,3 +10,4 @@ cppcheck-addon-ctu-file-list
 *.ctu-info
 *.dump
 tempCodeRunnerFile.c
+tempCodeRunnerFile.h

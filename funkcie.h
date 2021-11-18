@@ -774,6 +774,12 @@ void sum(jazdec* tabulka, size_t velkost){
         printf("\nData zo suboru neboli nacitane");
         return;
     }
+
+    if(velkost == 0){
+        printf("\nJazdci neboli najdeny");
+        return;
+    }
+
     printf("\n");
     for(size_t i = 0; i < velkost; i++){
         // Vo výpise automobilu kapitalizujem prvé písmenko značky
@@ -849,6 +855,12 @@ void driver(jazdec* tabulka, size_t velkost){
         printf("\nData zo suboru neboli nacitane");
         return;
     }
+
+    if(velkost == 0){
+        printf("\nJazdci neboli najdeny");
+        return;
+    }
+
     if(
         !(priezviskoJazdca = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))
         || !(parcialnePriezvisko = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))
@@ -967,6 +979,11 @@ void lap(jazdec* tabulka, size_t velkost){
         return;
     }
 
+    if(velkost == 0){
+        printf("\nJazdci neboli najdeny");
+        return;
+    }
+
 //*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
 
     for(size_t i = 0; i < velkost; i++){
@@ -1018,6 +1035,16 @@ void gender(jazdec* tabulka, size_t velkost){
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
 
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+
+    if(velkost == 0){
+        printf("\nJazdci neboli najdeny");
+        return;
+    }
+
     do{
         printf("\nZadajte pohlavie jazdca (m/f): ");
         scanf_s(" %c", &pohlavie, 1);
@@ -1028,11 +1055,6 @@ void gender(jazdec* tabulka, size_t velkost){
         }
     } while (pohlavie != 'm' && pohlavie != 'f');
     
-    if(!tabulka){
-        printf("\nData zo suboru neboli nacitane");
-        return;
-    }
-
 //*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
 
     for(size_t i = 0; i < velkost; i++){
@@ -1044,7 +1066,12 @@ void gender(jazdec* tabulka, size_t velkost){
             }
         }
     }
-    printf("\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno, tabulka[indexJazdca].priezvisko, indexCasu+1);
+    if(najlepsiCas != 0.f){
+        printf("\nNajlepsie kolo: %.3f\nJazdec: %s %s\nCislo kola: %d", tabulka[indexJazdca].casy[indexCasu], tabulka[indexJazdca].meno, tabulka[indexJazdca].priezvisko, indexCasu+1);
+    }
+    else{
+        printf("Jazdec nenajdeny");
+    }
 }
 
 // Formátovaný výpis najlepšieho kola pre jednotlivé značky aut
@@ -1091,6 +1118,11 @@ void brand(jazdec* tabulka, size_t velkost){
 
     if(!tabulka){
         printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+
+    if(velkost == 0){
+        printf("\nJazdci neboli najdeny");
         return;
     }
 
@@ -1188,6 +1220,16 @@ void year(jazdec* tabulka, size_t velkost){
     int indexJazdca = 0, indexCasu = 0, rok = 0, pocetArgumentov = 0;
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
+    
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+
+    if(velkost == 0){
+        printf("\nJazdci neboli najdeny");
+        return;
+    }
 
     do {
         printf("\nZadajte rok narodenia jazdca: ");
@@ -1198,11 +1240,6 @@ void year(jazdec* tabulka, size_t velkost){
             printf("\nZadali ste nespravny rok\n");
         }
     } while(pocetCislic(rok) != 4 || pocetArgumentov != 1);
-    
-    if(!tabulka){
-        printf("\nData zo suboru neboli nacitane");
-        return;
-    }
 
 //*--------------------------------------------- Hľadanie najlepšieho času --------------------------------------------
 
@@ -1256,6 +1293,11 @@ void average(jazdec* tabulka, size_t velkost){
         return;
     }
 
+    if(velkost == 0){
+        printf("\nJazdci neboli najdeny");
+        return;
+    }
+
 //*-------------------------------------------------- Hladanie jazdca -------------------------------------------------
 
     float najlepsiPriemer = 0.f;
@@ -1291,24 +1333,36 @@ void under(jazdec* tabulka, size_t velkost){
 
     /*  
         1. Štart
-        2. Zadeklarujem si premenné "pocetKol", "cas" a "pocetArgumentov"
+        2. Zadeklarujem si premenné "pocetKol", "cas", "pocetArgumentov" a "bExistuje"
         3. Inicializujem premenné
             "pocetKol" -> na hodnotu 0
             "cas" -> na hodnotu 0
+            "bExistuje" -> na hodnotu false (0)
         4. Načítam čas z klávesnice do premennej "cas"
         5. Prejdem celé pole jazdcov pričom sledujem ich čas
-        6. Je čas menší alebo rovný môju uloženému času
-            TRUE: Tak spravím formatovany výpis časov
+        6. Je čas menší alebo rovný môjmu uloženému času
+            TRUE: Tak nastavím premennú "bExistuje" na hodnotu true (1) a spravím formátovaný výpis časov
             FALSE: Pokračujem ďalej
-        7. Stop 
+        7. Stop
     */
 
 //*----------------------------------------------------- Premenné -----------------------------------------------------
 
     float cas = 0.f;
     int pocetArgumentov = 0;
+    bool bExistuje = false;
 
 //*-------------------------------------------------- Inicializácia ---------------------------------------------------
+
+    if(!tabulka){
+        printf("\nData zo suboru neboli nacitane");
+        return;
+    }
+
+    if(velkost == 0){
+        printf("\nJazdci neboli najdeny");
+        return;
+    }
 
     do {
         printf("\nZadajte cas: ");
@@ -1319,11 +1373,6 @@ void under(jazdec* tabulka, size_t velkost){
             printf("\nZadali ste nespravny cas\n");
         }
     } while(cas < 0.f || pocetArgumentov != 1);
-
-    if(!tabulka){
-        printf("\nData zo suboru neboli nacitane");
-        return;
-    }
 
 //*--------------------------------------------------- Výpis časov ----------------------------------------------------
 
@@ -1342,6 +1391,7 @@ void under(jazdec* tabulka, size_t velkost){
             }
         }
         if(pocetKol != 0){ // Pokiaľ máme kolá pod určitým časom
+            bExistuje = true;
             printf("%s %s - %d ", tabulka[i].meno, tabulka[i].priezvisko, pocetKol);
             if(pocetKol == 1){
                 printf("kolo");
@@ -1358,6 +1408,10 @@ void under(jazdec* tabulka, size_t velkost){
                 printf("\n");
             }
         }
+    }
+
+    if(bExistuje == false){
+        printf("Jazdec nenajdeny");
     }
 }
 
@@ -1415,6 +1469,12 @@ void change(jazdec** tabulka, size_t velkost){
         printf("\nData zo suboru neboli nacitane");
         return;
     }
+
+    if(velkost == 0){
+        printf("\nJazdci neboli najdeny");
+        return;
+    }
+
     if(
         !(priezviskoJazdca = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))
         || !(parcialnePriezvisko = (char *)calloc(VELKOST_BUFFERA, sizeof(char)))
@@ -1669,6 +1729,12 @@ void rmdriver(jazdec** tabulka, size_t *velkost){
         printf("\nData zo suboru neboli nacitane");
         return;
     }
+
+    if(*velkost == 0){
+        printf("\nJazdci neboli najdeny");
+        return;
+    }
+
     if(
         !(priezviskoJazdca = (string) calloc(VELKOST_BUFFERA, sizeof(char)))
         || !(menoJazdca = (string) calloc(VELKOST_BUFFERA, sizeof(char)))
@@ -1713,13 +1779,18 @@ void rmdriver(jazdec** tabulka, size_t *velkost){
     }
     else{        
         (*velkost)--;
-        if(!((*tabulka) = (jazdec*)realloc((*tabulka),(*velkost) * sizeof(jazdec)))){
-            string chybovaHlaska = (string)calloc(VELKOST_CHYBOVEHO_BUFFERA, sizeof(char));
-            strerror_s(chybovaHlaska, VELKOST_CHYBOVEHO_BUFFERA, (int)errno); // Konvertujem error kód na hlášku
-            printf("\nNemozno realokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
-            free(chybovaHlaska);
-            getchar();
-            exit(EXIT_FAILURE);
+        if(*velkost != 0){
+            if(!((*tabulka) = (jazdec*)realloc((*tabulka),(*velkost) * sizeof(jazdec)))){
+                string chybovaHlaska = (string)calloc(VELKOST_CHYBOVEHO_BUFFERA, sizeof(char));
+                strerror_s(chybovaHlaska, VELKOST_CHYBOVEHO_BUFFERA, (int)errno); // Konvertujem error kód na hlášku
+                printf("\nNemozno realokovat pamat\nChybovy kod %d -> %s", (int)errno, chybovaHlaska);
+                free(chybovaHlaska);
+                getchar();
+                exit(EXIT_FAILURE);
+            }
+        }
+        else{
+            free(*tabulka);
         }
         printf("Jazdec s menom \"%s %s\" bol vymazany.", menoJazdca, priezviskoJazdca);
     }

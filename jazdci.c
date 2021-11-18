@@ -36,17 +36,22 @@ int main(){
         
         printf("\n\n-------------------------------------");
         printf("\n\t\t\t\t    |");
-        printf("\ns - Sum\t\t\t\t    |");
-        printf("\nd - Driver\t\t\t    |");
-        printf("\nl - Lap\t\t\t\t    |");
-        printf("\ng - Gender\t\t\t    |");
-        printf("\nb - Brand\t\t\t    |");
-        printf("\ny - Year\t\t\t    |");
-        printf("\na - Average\t\t\t    |");
-        printf("\nu - Under\t\t\t    |");
-        printf("\nc - Change\t\t\t    |");
-        printf("\nn - New Driver\t\t\t    |");
-        printf("\nr - Remove Driver\t\t    |");
+        if(velkost == 0){
+            printf("\nn - New Driver\t\t\t    |");
+        }
+        else{
+            printf("\ns - Sum\t\t\t\t    |");
+            printf("\nd - Driver\t\t\t    |");
+            printf("\nl - Lap\t\t\t\t    |");
+            printf("\ng - Gender\t\t\t    |");
+            printf("\nb - Brand\t\t\t    |");
+            printf("\ny - Year\t\t\t    |");
+            printf("\na - Average\t\t\t    |");
+            printf("\nu - Under\t\t\t    |");
+            printf("\nc - Change\t\t\t    |");
+            printf("\nn - New Driver\t\t\t    |");
+            printf("\nr - Remove Driver\t\t    |");
+        }
         printf("\nq - Reload\t\t\t    |");
         printf("\nx - Exit\t\t\t    |");
         printf("\n\t\t\t\t    |");
@@ -60,53 +65,76 @@ int main(){
         //*---------------------------------------------- Výber možnosti ----------------------------------------------
         
         printf("\n--------------------------------------------------------------------------\n");
-        switch (vyber){
-            case 's':
-                sum(tabulka, velkost);
-                break;
-            case 'd':
-                driver(tabulka, velkost);
-                break;
-            case 'l':
-                lap(tabulka, velkost);
-                break;
-            case 'g':
-                gender(tabulka, velkost);
-                break;
-            case 'b':
-                brand(tabulka, velkost);
-                break;
-            case 'y':
-                year(tabulka, velkost);
-                break;
-            case 'a':
-                average(tabulka, velkost);
-                break;
-            case 'u':
-                under(tabulka, velkost);
-                break;
-            case 'c':
-                change(&tabulka, velkost);
-                break;
-            case 'n':
-                newdriver(&tabulka, &velkost);
-                break;
-            case 'r':
-                rmdriver(&tabulka, &velkost);
-                break;
-            case 'q':
-                uvolnenieJazdcov(&tabulka);
-                nacitatJazdcov(&tabulka, &velkost);
-                printf("\nObnovujem zoznam jazdcov...");
-                break;
-            case 'x':
-                uvolnenieJazdcov(&tabulka);
-                printf("\nUkoncujem...");
-                break;
-            default:
-                printf("\nChyba: Zly vyber");
-                break;
+
+        if(velkost == 0){
+            switch (vyber){
+                case 'n':
+                    newdriver(&tabulka, &velkost);
+                    break;
+                case 'q':
+                    uvolnenieJazdcov(&tabulka);
+                    nacitatJazdcov(&tabulka, &velkost);
+                    printf("\nObnovujem zoznam jazdcov...");
+                    break;
+                case 'x':
+                    uvolnenieJazdcov(&tabulka);
+                    printf("\nUkoncujem...");
+                    break;
+                default:
+                    printf("\nChyba: Zly vyber");
+                    break;
+            }
         }
+        else{
+            switch (vyber){
+                case 's':
+                    sum(tabulka, velkost);
+                    break;
+                case 'd':
+                    driver(tabulka, velkost);
+                    break;
+                case 'l':
+                    lap(tabulka, velkost);
+                    break;
+                case 'g':
+                    gender(tabulka, velkost);
+                    break;
+                case 'b':
+                    brand(tabulka, velkost);
+                    break;
+                case 'y':
+                    year(tabulka, velkost);
+                    break;
+                case 'a':
+                    average(tabulka, velkost);
+                    break;
+                case 'u':
+                    under(tabulka, velkost);
+                    break;
+                case 'c':
+                    change(&tabulka, velkost);
+                    break;
+                case 'n':
+                    newdriver(&tabulka, &velkost);
+                    break;
+                case 'r':
+                    rmdriver(&tabulka, &velkost);
+                    break;
+                case 'q':
+                    uvolnenieJazdcov(&tabulka);
+                    nacitatJazdcov(&tabulka, &velkost);
+                    printf("\nObnovujem zoznam jazdcov...");
+                    break;
+                case 'x':
+                    uvolnenieJazdcov(&tabulka);
+                    printf("\nUkoncujem...");
+                    break;
+                default:
+                    printf("\nChyba: Zly vyber");
+                    break;
+            }
+        }
+
         printf("\n\n--------------------------------------------------------------------------");
 
     } while (vyber != 'x');
