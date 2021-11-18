@@ -1549,10 +1549,13 @@ void change(jazdec** tabulka, size_t velkost){
 
     vpisatDoSuboru((*tabulka), velkost);
 
-    printf("\nJazdec s menom \"%s %s\" bol upraveny.", menoJazdca, priezviskoJazdca);
+    printf("\nJazdec s menom \"%s %s\" bol upraveny.\n", menoJazdca, priezviskoJazdca);
 
     free(priezviskoJazdca);
     free(parcialnePriezvisko);
+
+    printf("\n--------------------------------------------------------------------------\n");
+    sum((*tabulka), velkost);
 }
 
 // Vytvorí nového jazdca v poli a súbore
