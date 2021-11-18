@@ -8,8 +8,6 @@
 
 */
 
-// TODO dorobiť funkcie na zmenu značky auta, mena, priezviska, roku narodenia a genderu?
-
 //*---------------------------------------------------- Preprocesor ---------------------------------------------------
 
 // Program bol naprogramovaný v Visual Studio Code s GCC kompilátorom
